@@ -1,0 +1,11 @@
+messenger_home:
+    path:   /
+    defaults: { _controller: MessengerBundle:Default:index }
+
+messenger_new_conversation:
+    path:     /new/conversation/{user1}/{user2}
+    defaults: { _controller: MessengerBundle:Default:newConversation }
+
+messenger_new_message:
+    path:   /new/message/{conversation}
+    defaults: { _controller: MessengerBundle:Default:newMessage }
