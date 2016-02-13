@@ -1,68 +1,34 @@
-Symfony Standard Edition
-========================
+Api Symfony2 Project : *Le clan autonome des semi-croustillants*
+=============
 
-Welcome to the Symfony Standard Edition - a fully-functional Symfony
-application that you can use as the skeleton for your new applications.
+Workflow
+--------
 
-For details on how to download and get started with Symfony, see the
-[Installation][1] chapter of the Symfony Documentation.
+**Installation : **
 
-What's inside?
---------------
+> - Let's start with cloning the project in the dev environment 
+> - `composer install` to install dependencies
+> - The website is available by executing `web/app.php` for the prod environment, and `web/app_dev.php` for the dev environment
 
-The Symfony Standard Edition is configured with the following defaults:
+**Working on the project : **
 
-  * An AppBundle you can use to start coding;
+> *A few rules before starting to code*
+> 1. Prefer `[]` to build an array instead of `array()`
+> 2. Always finish the last line of an array with a `,`
+> 3. Split the code the best as you can, let it readable
+> 5. Use labels on the PR, to let us know what we can expect
+> 6. Never "insta-merge" a PR, excepted if it's a minimal modification or a hotfix
+> 7. Never `git pull` without the `--rebase` (By default, it's merging, that can erase potential conflicts, and we don't want it)
+> 8. Have fun
 
-  * Twig as the only configured template engine;
+---------- 
 
-  * Doctrine ORM/DBAL;
+> - `git pull --rebase` on master
+> - create a new branch from master, with a name letting us understand what you're working on
+> - Let's develop your feature, taking care of best practices and commenting if the code isn't clear enough 
+> - Once the feature is done, you can commit the different parts of your feature, and then push on your branch
+> - Open a pull request on master, and wait for at least **1** dev to approve your PR (We usually write :+1: (thumb) when it's ok
+> - Take care to solve conflicts if there are some
+> - When it's merged, get back to master and `git pull --rebase` again
+> - Let's start again, be the best dev of the world and get cookies 
 
-  * Swiftmailer;
-
-  * Annotations enabled for everything.
-
-It comes pre-configured with the following bundles:
-
-  * **FrameworkBundle** - The core Symfony framework bundle
-
-  * [**SensioFrameworkExtraBundle**][6] - Adds several enhancements, including
-    template and routing annotation capability
-
-  * [**DoctrineBundle**][7] - Adds support for the Doctrine ORM
-
-  * [**TwigBundle**][8] - Adds support for the Twig templating engine
-
-  * [**SecurityBundle**][9] - Adds security by integrating Symfony's security
-    component
-
-  * [**SwiftmailerBundle**][10] - Adds support for Swiftmailer, a library for
-    sending emails
-
-  * [**MonologBundle**][11] - Adds support for Monolog, a logging library
-
-  * **WebProfilerBundle** (in dev/test env) - Adds profiling functionality and
-    the web debug toolbar
-
-  * **SensioDistributionBundle** (in dev/test env) - Adds functionality for
-    configuring and working with Symfony distributions
-
-  * [**SensioGeneratorBundle**][13] (in dev/test env) - Adds code generation
-    capabilities
-
-  * **DebugBundle** (in dev/test env) - Adds Debug and VarDumper component
-    integration
-
-All libraries and bundles included in the Symfony Standard Edition are
-released under the MIT or BSD license.
-
-Enjoy!
-
-[1]:  https://symfony.com/doc/2.8/book/installation.html
-[6]:  https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/index.html
-[7]:  https://symfony.com/doc/2.8/book/doctrine.html
-[8]:  https://symfony.com/doc/2.8/book/templating.html
-[9]:  https://symfony.com/doc/2.8/book/security.html
-[10]: https://symfony.com/doc/2.8/cookbook/email.html
-[11]: https://symfony.com/doc/2.8/cookbook/logging/monolog.html
-[13]: https://symfony.com/doc/2.8/bundles/SensioGeneratorBundle/index.html
