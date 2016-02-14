@@ -41,24 +41,4 @@ class DefaultController extends Controller
         return new Response("Friend add");
     }
 
-    public function searchFriendAction($username)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $userRepository = $em->getRepository(User::class);
-
-
-        $query = $userRepository->createQuery(
-            'SELECT u
-             FROM UserBundle:User u
-             WHERE u.username
-             LIKE :username'
-        );
-
-        $users = $query->getResult();
-
-    //    if (null === $username ) {
-    //        throw new NotFoundHttpException('User not found');
-    //    }
-
-    }
 }
