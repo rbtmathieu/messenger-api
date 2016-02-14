@@ -74,8 +74,26 @@ fos_user:
     user_class: UserBundle\Entity\User
 
 fos_rest:
+    param_fetcher_listener: true
+    body_listener: true
     routing_loader:
         default_format: json
+    format_listener: true
+    body_converter:
+        enabled: true
+        validate: true
+    view:
+        view_response_listener: true
+    exception:
+        codes:
+            'Symfony\Component\Routing\Exception\ResourceNotFoundException': 404
+            'Doctrine\ORM\OptimisticLockException': HTTP_CONFLICT
+        messages:
+            'Symfony\Component\Routing\Exception\ResourceNotFoundException': true
+    allowed_methods_listener: true
+    access_denied_listener:
+        json: true
+    disable_csrf_role: ROLE_USER
 
 doctrine_migrations:
     dir_name: "%kernel.root_dir%/DoctrineMigrations"

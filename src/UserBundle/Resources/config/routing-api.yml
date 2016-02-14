@@ -1,0 +1,4 @@
+user-api-login:
+    resource: '@UserBundle/Controller/LoginApiController.php'
+    prefix: /login
+    type: rest
