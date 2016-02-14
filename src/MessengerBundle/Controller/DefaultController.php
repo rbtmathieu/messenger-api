@@ -28,7 +28,7 @@ class DefaultController extends Controller
         $user[0] = $userRepo->findOneByUsername('bapthf');
         $user[1] = $userRepo->findOneByUsername('remi');
 
-        if (null === $user[0] or null === $user[1]) {
+        if (null === $user[0] || null === $user[1]) {
             throw new NotFoundHttpException('Users not found');
         }
 
@@ -95,8 +95,8 @@ class DefaultController extends Controller
         $em = $this->getManager();
 
         $userRepository = $em->getRepository(User::class);
-        $user1 = $userRepository->findOneById($user1id);
-        $user2 = $userRepository->findOneById($user2id);
+        $user1 = $userRepository->find($user1id);
+        $user2 = $userRepository->find($user2id);
 
         $conversation = $em->getRepository(Conversation::class)->findOneBy(['user1' => $user1, 'user2' => $user2]);
 
@@ -114,8 +114,6 @@ class DefaultController extends Controller
         $em->persist($conversation);
 
         $em->flush();
-
-        dump($conversation->getId());die;
 
         return $conversation;
     }

@@ -1,0 +1,7 @@
+messages:
+    type:     rest
+    resource: @MessengerBundle/Controller/MessagesController.php
+
+conversations:
+    type:     rest
+    resource: @MessengerBundle/Controller/ConversationsController.php
