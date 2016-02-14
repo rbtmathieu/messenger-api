@@ -10,3 +10,7 @@ services:
             - { name: doctrine.event_subscriber, connection: default }
         calls:
             - [ setAnnotationReader, [ @annotation_reader ] ]
+
+    app.token_authenticator:
+        class: UserBundle\Security\TokenAuthenticator
+        arguments: ['@doctrine.orm.entity_manager']
