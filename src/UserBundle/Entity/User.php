@@ -19,6 +19,11 @@ class User extends BaseUser
     protected $id;
 
     /**
+     * @ORM\Column(type="string", unique=true)
+     */
+    private $apiKey;
+
+    /**
      * @ORM\ManyToMany(targetEntity="MessengerBundle\Entity\Conversation", cascade={"persist"})
      */
     protected $conversation;
@@ -26,6 +31,10 @@ class User extends BaseUser
     public function __construct()
     {
         parent::__construct();
+        $this->apiKey = substr(str_shuffle('0123456789AZERTYUIOPQSDFGHJKLMWXCVBNazertyuiopqsdfghjklmwxcvbn'), 32);
+        $this->roles = array(
+            'ROLE_USER',
+        );
     }
 
     /**
@@ -59,5 +68,53 @@ class User extends BaseUser
     public function getConversation()
     {
         return $this->conversation;
+    }
+
+    /**
+     * Set apiToken
+     *
+     * @param string $apiToken
+     *
+     * @return User
+     */
+    public function setApiToken($apiToken)
+    {
+        $this->apiToken = $apiToken;
+
+        return $this;
+    }
+
+    /**
+     * Get apiToken
+     *
+     * @return string
+     */
+    public function getApiToken()
+    {
+        return $this->apiToken;
+    }
+
+    /**
+     * Set apiKey
+     *
+     * @param string $apiKey
+     *
+     * @return User
+     */
+    public function setApiKey($apiKey)
+    {
+        $this->apiKey = $apiKey;
+
+        return $this;
+    }
+
+    /**
+     * Get apiKey
+     *
+     * @return string
+     */
+    public function getApiKey()
+    {
+        return $this->apiKey;
     }
 }
