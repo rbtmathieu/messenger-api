@@ -14,6 +14,7 @@ use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use UserBundle\Entity\User;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 /**
  * Class LoginApiController
@@ -23,6 +24,15 @@ class LoginApiController extends FOSRestController implements ClassResourceInter
 {
     /**
      * Return User object and apiKey with credentials
+     *
+     * @ApiDoc(
+     *  resource = true,
+     *  description = "Return User object and apiKey with credentials",
+     *  statusCodes = {
+     *      200 = "Returned when sucessful",
+     *      401 = "Returned when bad credentials were sent"
+     *  }
+     * )
      *
      * @param ParamFetcher $paramFetcher
      * @param string $slug Username or email
@@ -37,7 +47,7 @@ class LoginApiController extends FOSRestController implements ClassResourceInter
         $password = $paramFetcher->get('password');
 
         $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('UserBundle:User')->findOneOrNullUserByEmail($email);
+        $user = $em->getRepository('UserBundle:User')->findOneOrNullUserByEmail($email, $slug);
 
         if($user) {
             $encoderService = $this->get('security.encoder_factory');
