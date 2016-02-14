@@ -9,3 +9,4 @@ user_add_friend:
 user_search_friend:
     path:   /friend/{username}
     defaults: { _controller: UserBundle:Default:searchFriend }
+

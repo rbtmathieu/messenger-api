@@ -12,4 +12,20 @@ use Doctrine\ORM\EntityRepository;
  */
 class UserRepository extends EntityRepository
 {
+    public function searchFriend($username)
+    {
+        $em = $this->getEntityManager();
+        $query = $em->createQueryBuilder();
+
+        $query->select('u')
+              ->from('UserBundle:User', 'u')
+              ->where($query->expr()->like('u.username', ':username'))
+              ->setParameter('username', '%'.$username.'%');
+
+        $results = $query->getQuery();
+        $username = $results->getResult();
+
+        return $username;
+
+    }
 }

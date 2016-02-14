@@ -41,4 +41,21 @@ class DefaultController extends Controller
         return new Response("Friend add");
     }
 
+
+    public function searchFriendAction($username)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $userRepository = $em->getRepository(User::class);
+
+        $user = $userRepository->searchFriend($username);
+
+        if (null === $user ) {
+            throw new NotFoundHttpException('User not found');
+        }
+
+        $this->username = $user;
+
+        dump($user);
+        return new Response("Search");
+    }
 }
