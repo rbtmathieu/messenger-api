@@ -2,6 +2,11 @@ user:
     resource: "@UserBundle/Resources/config/routing.yml"
     prefix:   /user
 
+user-api:
+    type: rest
+    resource: "@UserBundle/Resources/config/routing-api.yml"
+    prefix:   /user-api
+
 messenger:
     resource: "@MessengerBundle/Resources/config/routing.yml"
     prefix:   /
