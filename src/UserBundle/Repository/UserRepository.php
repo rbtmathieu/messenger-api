@@ -26,6 +26,5 @@ class UserRepository extends EntityRepository
         $username = $results->getResult();
 
         return $username;
-
     }
 }

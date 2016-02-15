@@ -26,10 +26,10 @@ class User extends BaseUser
     /**
      * @ORM\ManyToMany(targetEntity="User", mappedBy="myFriends")
      **/
-    private $friendsWithMe;
+    private $friendWithMe;
 
     /**
-     * @ORM\ManyToMany(targetEntity="User", inversedBy="friendsWithMe")
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="friendWithMe")
      * @ORM\JoinTable(name="friends",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="friend_user_id", referencedColumnName="id")}
@@ -40,7 +40,7 @@ class User extends BaseUser
     public function __construct()
     {
         parent::__construct();
-        $this->friendsWithMe = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->friendWithMe = new \Doctrine\Common\Collections\ArrayCollection();
         $this->myFriends = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -70,7 +70,7 @@ class User extends BaseUser
     /**
      * Get conversation
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getConversation()
     {
@@ -94,7 +94,7 @@ class User extends BaseUser
     }
 
     /**
-     * Add friends
+     * Add friend
      *
      * @param friend
      * @return user
@@ -109,36 +109,26 @@ class User extends BaseUser
 
 
     /**
-     * Add friendsWithMe
+     * Add friendWithMe
      *
-     * @param \UserBundle\Entity\User $friendsWithMe
+     * @param \UserBundle\Entity\User $friendWithMe
      * @return User
      */
-    public function addFriendsWithMe(\UserBundle\Entity\User $friendsWithMe)
+    public function addFriendWithMe(\UserBundle\Entity\User $friendWithMe)
     {
-        $this->friendsWithMe[] = $friendsWithMe;
+        $this->friendWithMe[] = $friendWithMe;
 
         return $this;
     }
 
     /**
-     * Remove friendsWithMe
+     * Remove friendWithMe
      *
-     * @param \UserBundle\Entity\User $friendsWithMe
+     * @param \UserBundle\Entity\User $friendWithMe
      */
-    public function removeFriendsWithMe(\UserBundle\Entity\User $friendsWithMe)
+    public function removeFriendWithMe(\UserBundle\Entity\User $friendWithMe)
     {
-        $this->friendsWithMe->removeElement($friendsWithMe);
-    }
-
-    /**
-     * Get friendsWithMe
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getFriendsWithMe()
-    {
-        return $this->friendsWithMe;
+        $this->friendWithMe->removeElement($friendWithMe);
     }
 
     /**
@@ -162,5 +152,15 @@ class User extends BaseUser
     public function removeMyFriend(\UserBundle\Entity\User $myFriends)
     {
         $this->myFriends->removeElement($myFriends);
+    }
+
+    /**
+     * Get friendWithMe
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFriendWithMe()
+    {
+        return $this->friendWithMe;
     }
 }

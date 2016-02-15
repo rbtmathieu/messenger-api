@@ -49,13 +49,6 @@ class DefaultController extends Controller
 
         $user = $userRepository->searchFriend($username);
 
-        if (null === $user ) {
-            throw new NotFoundHttpException('User not found');
-        }
-
-        $this->username = $user;
-
-        dump($user);
         return new Response("Search");
     }
 }
