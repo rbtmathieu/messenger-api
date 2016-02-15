@@ -3,15 +3,10 @@
 namespace UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use UserBundle\Entity\User;
 
 class DefaultController extends Controller
 {
-    /**
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     public function indexAction()
     {
         return $this->render('UserBundle:Default:index.html.twig');
@@ -26,7 +21,7 @@ class DefaultController extends Controller
     public function addFriendAction($user1id, $user2id)
     {
         $em = $this->getDoctrine()->getManager();
-        $userRepository = $em->getRepository(User::class);
+        $userRepository = $em->getRepository('UserBundle:User');
 
         $user1 = $userRepository->find($user1id);
         $user2 = $userRepository->find($user2id);
@@ -36,8 +31,20 @@ class DefaultController extends Controller
         }
 
         $user1->addFriend($user2);
-
         return new Response("Friend add");
     }
 
+    /**
+     * @param $username
+     * @return Response
+     */
+    public function searchFriendAction($username)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $userRepository = $em->getRepository('UserBundle:User');
+
+        $user = $userRepository->searchFriend($username);
+
+        return new Response("Search");
+    }
 }

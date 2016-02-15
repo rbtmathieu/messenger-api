@@ -6,8 +6,8 @@ use FOS\UserBundle\Entity\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="fos_user")
  * @ORM\Entity(repositoryClass="UserBundle\Repository\UserRepository")
+ * @ORM\Table(name="fos_user")
  */
 class User extends BaseUser
 {
@@ -19,17 +19,22 @@ class User extends BaseUser
     protected $id;
 
     /**
+     * @ORM\Column(type="string", unique=true)
+     */
+    private $apiKey;
+
+    /**
      * @ORM\ManyToMany(targetEntity="MessengerBundle\Entity\Conversation", cascade={"persist"})
      */
     protected $conversation;
 
     /**
-     * @ORM\ManyToMany(targetEntity="User", mappedBy="myFriends")
+     * @ORM\ManyToMany(targetEntity="UserBundle\Entity\User", mappedBy="myFriends")
      **/
     private $friendWithMe;
 
     /**
-     * @ORM\ManyToMany(targetEntity="User", inversedBy="friendWithMe")
+     * @ORM\ManyToMany(targetEntity="UserBundle\Entity\User", inversedBy="friendWithMe")
      * @ORM\JoinTable(name="friends",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="friend_user_id", referencedColumnName="id")}
@@ -42,6 +47,10 @@ class User extends BaseUser
         parent::__construct();
         $this->friendWithMe = new \Doctrine\Common\Collections\ArrayCollection();
         $this->myFriends = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->apiKey = substr(str_shuffle('0123456789AZERTYUIOPQSDFGHJKLMWXCVBNazertyuiopqsdfghjklmwxcvbn'), 32);
+        $this->roles = array(
+            'ROLE_USER',
+        );
     }
 
     /**
@@ -78,19 +87,51 @@ class User extends BaseUser
     }
 
     /**
-     * @return mixed
+     * Set apiToken
+     *
+     * @param string $apiToken
+     *
+     * @return User
      */
-    public function getMyFriends()
+    public function setApiToken($apiToken)
     {
-        return $this->myFriends;
+        $this->apiToken = $apiToken;
+
+        return $this;
     }
 
     /**
-     * @param mixed $myFriends
+     * Get apiToken
+     *
+     * @return string
      */
-    public function setMyFriends($myFriends)
+    public function getApiToken()
     {
-        $this->myFriends = $myFriends;
+        return $this->apiToken;
+    }
+
+    /**
+     * Set apiKey
+     *
+     * @param string $apiKey
+     *
+     * @return User
+     */
+    public function setApiKey($apiKey)
+    {
+        $this->apiKey = $apiKey;
+
+        return $this;
+    }
+
+    /**
+     * Get apiKey
+     *
+     * @return string
+     */
+    public function getApiKey()
+    {
+        return $this->apiKey;
     }
 
     /**
@@ -106,8 +147,6 @@ class User extends BaseUser
         return $this;
     }
 
-
-
     /**
      * Add friendWithMe
      *
@@ -119,6 +158,30 @@ class User extends BaseUser
         $this->friendWithMe[] = $friendWithMe;
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFriendWithMe()
+    {
+        return $this->friendWithMe;
+    }
+
+    /**
+     * @param mixed $friendWithMe
+     */
+    public function setFriendWithMe($friendWithMe)
+    {
+        $this->friendWithMe = $friendWithMe;
+    }
+
+    /**
+     * @param mixed $myFriends
+     */
+    public function setMyFriends($myFriends)
+    {
+        $this->myFriends = $myFriends;
     }
 
     /**
@@ -155,12 +218,12 @@ class User extends BaseUser
     }
 
     /**
-     * Get friendWithMe
+     * Get myFriends
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getFriendWithMe()
+    public function getMyFriends()
     {
-        return $this->friendWithMe;
+        return $this->myFriends;
     }
 }
