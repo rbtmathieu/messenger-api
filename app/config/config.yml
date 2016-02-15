@@ -103,3 +103,11 @@ doctrine_migrations:
 
 
 nelmio_api_doc: ~
+
+nelmio_cors:
+    paths:
+        '^/':
+            allow-origin: ['*']
+            allow-headers: ['Authorization', 'X-Requested-With', 'Content-Type', 'Accept', 'Origin', 'X-Custom-Auth', 'X-AUTH-TOKEN']
+            allow-methods: ['GET', 'POST', 'PUT', 'DELETE']
+            max_age: 3600
