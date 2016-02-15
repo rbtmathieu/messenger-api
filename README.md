@@ -8,6 +8,8 @@ Workflow
 
 > - Let's start with cloning the project in the dev environment 
 > - `composer install` to install dependencies
+> - `php app/console doctrine:database:create` to create the database
+> - `php app/console doctrine:migrations:migrate` to update your databaase
 > - The website is available by executing `web/app.php` for the prod environment, and `web/app_dev.php` for the dev environment
 
 **Working on the project :**
@@ -27,6 +29,7 @@ Workflow
 > - `git pull --rebase` on master
 > - create a new branch from master, with a name letting us understand what you're working on
 > - Let's develop your feature, taking care of best practices and commenting if the code isn't clear enough 
+> - If you've made changes in database scheme, generate the migration diff with `php app/console doctrine:migrations:diff`and don't forget to commit the file
 > - Once the feature is done, you can commit the different parts of your feature, and then push on your branch
 > - Open a pull request on master, and wait for at least **1** dev to approve your PR (We usually write :+1: (thumb) when it's ok
 > - Take care to solve conflicts if there are some
