@@ -1,3 +1,11 @@
 user_homepage:
     path:     /
     defaults: { _controller: UserBundle:Default:index }
+
+user_add_friend:
+    path:   /friend/{user1id}/{user2id}
+    defaults: { _controller: UserBundle:Default:addFriend }
+
+user_search_friend:
+    path:   /friend/{username}
+    defaults: { _controller: UserBundle:Default:searchFriend }

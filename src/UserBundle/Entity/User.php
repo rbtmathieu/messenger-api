@@ -28,9 +28,25 @@ class User extends BaseUser
      */
     protected $conversation;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="UserBundle\Entity\User", mappedBy="myFriends")
+     **/
+    private $friendWithMe;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="UserBundle\Entity\User", inversedBy="friendWithMe")
+     * @ORM\JoinTable(name="friends",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="friend_user_id", referencedColumnName="id")}
+     *      )
+     **/
+    private $myFriends;
+
     public function __construct()
     {
         parent::__construct();
+        $this->friendWithMe = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->myFriends = new \Doctrine\Common\Collections\ArrayCollection();
         $this->apiKey = substr(str_shuffle('0123456789AZERTYUIOPQSDFGHJKLMWXCVBNazertyuiopqsdfghjklmwxcvbn'), 32);
         $this->roles = array(
             'ROLE_USER',
@@ -116,5 +132,98 @@ class User extends BaseUser
     public function getApiKey()
     {
         return $this->apiKey;
+    }
+
+    /**
+     * Add friend
+     *
+     * @param friend
+     * @return user
+     */
+    public function addFriend(User $friend)
+    {
+        $this->myFriends[] = $friend;
+
+        return $this;
+    }
+
+    /**
+     * Add friendWithMe
+     *
+     * @param \UserBundle\Entity\User $friendWithMe
+     * @return User
+     */
+    public function addFriendWithMe(\UserBundle\Entity\User $friendWithMe)
+    {
+        $this->friendWithMe[] = $friendWithMe;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFriendWithMe()
+    {
+        return $this->friendWithMe;
+    }
+
+    /**
+     * @param mixed $friendWithMe
+     */
+    public function setFriendWithMe($friendWithMe)
+    {
+        $this->friendWithMe = $friendWithMe;
+    }
+
+    /**
+     * @param mixed $myFriends
+     */
+    public function setMyFriends($myFriends)
+    {
+        $this->myFriends = $myFriends;
+    }
+
+    /**
+     * Remove friendWithMe
+     *
+     * @param \UserBundle\Entity\User $friendWithMe
+     */
+    public function removeFriendWithMe(\UserBundle\Entity\User $friendWithMe)
+    {
+        $this->friendWithMe->removeElement($friendWithMe);
+    }
+
+    /**
+     * Add myFriends
+     *
+     * @param \UserBundle\Entity\User $myFriends
+     * @return User
+     */
+    public function addMyFriend(\UserBundle\Entity\User $myFriends)
+    {
+        $this->myFriends[] = $myFriends;
+
+        return $this;
+    }
+
+    /**
+     * Remove myFriends
+     *
+     * @param \UserBundle\Entity\User $myFriends
+     */
+    public function removeMyFriend(\UserBundle\Entity\User $myFriends)
+    {
+        $this->myFriends->removeElement($myFriends);
+    }
+
+    /**
+     * Get myFriends
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMyFriends()
+    {
+        return $this->myFriends;
     }
 }
