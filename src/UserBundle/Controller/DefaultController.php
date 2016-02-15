@@ -37,7 +37,6 @@ class DefaultController extends Controller
 
         $user1->addFriend($user2);
 
-        dump($user1->getMyFriends());
         return new Response("Friend add");
     }
 
