@@ -45,7 +45,6 @@ class DefaultController extends Controller
 
         $user = $userRepository->searchFriend($username);
 
-        dump($user);
         return new Response("Search");
     }
 }
