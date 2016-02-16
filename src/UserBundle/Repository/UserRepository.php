@@ -6,6 +6,12 @@ use Doctrine\ORM\EntityRepository;
 
 class UserRepository extends EntityRepository
 {
+    /**
+     * @param $email
+     * @param $slug
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function findOneOrNullUserByEmail($email, $slug)
     {
         return $this->getEntityManager()
@@ -17,5 +23,25 @@ class UserRepository extends EntityRepository
             ->setParameter('email', $email)
             ->setParameter('slug', $slug)
             ->getOneOrNullResult();
+    }
+
+    /**
+     * @param $username
+     * @return array
+     */
+    public function searchFriend($username)
+    {
+        $em = $this->getEntityManager();
+        $query = $em->createQueryBuilder();
+
+        $query->select('u')
+            ->from('UserBundle:User', 'u')
+            ->where($query->expr()->like('u.username', ':username'))
+            ->setParameter('username', '%'.$username.'%');
+
+        $results = $query->getQuery();
+        $username = $results->getResult();
+
+        return $username;
     }
 }
