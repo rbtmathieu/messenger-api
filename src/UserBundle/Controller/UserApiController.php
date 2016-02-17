@@ -215,6 +215,36 @@ class UserApiController extends FOSRestController
         return $view->setData($user, $friend)->setStatusCode(200);
     }
 
+
+    /**
+     * Search for users by username
+     *
+     * @ApiDoc(
+     *  resource = true,
+     *  description= "Search for users by username",
+     *  statusCodes = {
+     *      200 = "Returned when successful",
+     *      400 = "Returned when data has errors"
+     *  }
+     * )
+     *
+     * @param Request $request
+     *
+     * @RequestParam(name="q", nullable=false, strict=true, description="Query searched")
+     *
+     * @return View
+     */
+    public function searchFriendAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $users = $em->getRepository('UserBundle:User')
+            ->searchFriend($request->get('q'));
+
+        $view = View::create();
+
+        return $view->setData($users)->setStatusCode(200);
+    }
+
     /**
      * Get the validation errors
      *
