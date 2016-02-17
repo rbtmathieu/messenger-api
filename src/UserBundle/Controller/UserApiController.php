@@ -134,6 +134,47 @@ class UserApiController extends FOSRestController
     }
 
     /**
+     * Add a friend identified by its ID to an User NEED X-AUTH-TOKEN
+     *
+     * @ApiDoc(
+     *      resource = true,
+     *      description = "Add a friend identified by its ID to an User NEED X-AUTH-TOKEN",
+     *      statusCodes = {
+     *          200 = "Returned when successful",
+     *          400 = "Returned when data has errors",
+     *          401 = "Returned when authentication failed",
+     *          404 = "Returned when a user is not found"
+     *  }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher
+     * @param Request $request
+     *
+     * @RequestParam(name="friendId", nullable=false, strict=true, description="Id of the friend")
+     *
+     * @return View
+     */
+    public function postFriendsAction(ParamFetcher $paramFetcher, Request $request)
+    {
+        $apiKey = $request->headers->get('X-AUTH-TOKEN');
+
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository('UserBundle:User')->findUserByApiKey($apiKey);
+        $friend = $em->getRepository('UserBundle:User')->find($paramFetcher->get('friendId'));
+
+        if(null === $user || null === $friend) {
+            throw new NotFoundHttpException('User could not be found');
+        }
+
+        $user->addFriend($friend);
+        $em->flush();
+
+        $view = View::create();
+
+        return $view->setData($user, $friend)->setStatusCode(200);
+    }
+
+    /**
      * Get the validation errors
      *
      * @param ConstraintViolationList $errors
