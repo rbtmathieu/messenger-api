@@ -26,6 +26,23 @@ class UserRepository extends EntityRepository
     }
 
     /**
+     * @param string $apiKey
+     *
+     * @return array
+     */
+    public function findUserByApiKey($apiKey)
+    {
+        return $this->getEntityManager()
+            ->createQuery('
+                SELECT u
+                FROM UserBundle:User u
+                WHERE u.apiKey = :apiKey
+            ')
+            ->setParameter('apiKey', $apiKey)
+            ->getResult();
+    }
+
+    /**
      * @param $username
      * @return array
      */
