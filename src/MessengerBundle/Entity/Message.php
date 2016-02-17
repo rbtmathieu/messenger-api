@@ -5,6 +5,7 @@ namespace MessengerBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use UserBundle\Entity\User;
 
 /**
  * Message
@@ -130,10 +131,10 @@ class Message
     /**
      * Set user
      *
-     * @param \stdClass $user
+     * @param User $user
      * @return Message
      */
-    public function setUser($user)
+    public function setUser(User $user)
     {
         $this->user = $user;
 
@@ -161,7 +162,7 @@ class Message
     /**
      * @param Conversation $conversation
      */
-    public function setConversation($conversation)
+    public function setConversation(Conversation $conversation)
     {
         $this->conversation = $conversation;
     }
