@@ -33,7 +33,7 @@ class Conversation
     /**
      * @var Collection
      *
-     * @ORM\ManyToMany(targetEntity="MessengerBundle\Entity\Message", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="MessengerBundle\Entity\Message", cascade={"persist"}, mappedBy="conversation")
      */
     private $messages;
 

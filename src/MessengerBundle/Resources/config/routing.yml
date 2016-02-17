@@ -3,7 +3,7 @@ messenger_home:
     defaults: { _controller: MessengerBundle:Default:index }
 
 messenger_new_conversation:
-    path:     /new/conversation/{user1}/{user2}
+    path:     /new/conversation/{user1id}/{user2id}
     defaults: { _controller: MessengerBundle:Default:newConversation }
 
 messenger_new_message:

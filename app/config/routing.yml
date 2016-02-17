@@ -14,7 +14,6 @@ messenger:
 messenger-api:
     type: rest
     resource: "@MessengerBundle/Resources/config/routing-api.yml"
-    prefix:   /messenger-api
 
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
