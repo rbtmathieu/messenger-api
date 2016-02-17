@@ -15,6 +15,7 @@ use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use UserBundle\Entity\User;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Symfony\Component\HttpFoundation\Request;
 
 class UserApiController extends FOSRestController
 {
@@ -26,7 +27,7 @@ class UserApiController extends FOSRestController
      *  description = "Create an User with sent data",
      *  statusCodes = {
      *      200 = "Returned when successful",
-     *      400 = "Returned when errors occured"
+     *      400 = "Returned when data has errors"
      *  }
      * )
      *
@@ -56,6 +57,71 @@ class UserApiController extends FOSRestController
         $view = View::create();
 
         $errors = $this->get('validator')->validate($user, array('Registration'));
+
+        if(count($errors) == 0) {
+            $um->updateUser($user);
+            $view->setData($user)->setStatusCode(200);
+            return $view;
+        } else {
+            $view = $this->getErrorsView($errors);
+            return $view;
+        }
+    }
+
+    /**
+     * Update an User identified by Username or email with sent data NEED X-AUTH-TOKEN
+     *
+     * @ApiDoc(
+     *  resource = true,
+     *  description = "Update an User identified by Username or email with sent data NEED X-AUTH-TOKEN",
+     *  statusCodes = {
+     *      200 = "Returned when successful",
+     *      400 = "Returned when data has errors",
+     *      401 = "Returned when authentication failed",
+     *      404 = "Returned when the User is not found"
+     *  }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher
+     * @param Request $request
+     *
+     * @RequestParam(name="username", nullable=false, strict=true, description="Username")
+     * @RequestParam(name="newUsername", nullable=true, strict=true, description="New Username")
+     * @RequestParam(name="email", nullable=true, strict=true, description="Email")
+     * @RequestParam(name="newEmail", nullable=true, strict=true, description="New email")
+     * @RequestParam(name="password", nullable=true, strict=true, description="Password")
+     * @RequestParam(name="confirmPassword", nullable=true, strict=true, description="Confirm password")
+     *
+     * @return View
+     */
+    public function putUserAction(ParamFetcher $paramFetcher, Request $request)
+    {
+        $apiKey = $request->headers->get('X-AUTH-TOKEN');
+
+        $query = $this->getDoctrine()->getManager()->getRepository('UserBundle:User')
+            ->findOneOrNullUserByEmail(
+                $paramFetcher->get('email'),
+                $paramFetcher->get('username')
+            );
+
+        $um = $this->container->get('fos_user.user_manager');
+        $user = $um->findUserByUsername($query->getUsername());
+
+        if($apiKey !== $user->getApiKey()) {
+            throw new AuthenticationException('Not authorized');
+        }
+
+        if($paramFetcher->get('newUsername')) { $user->setUsername($paramFetcher->get('newUsername')); }
+        if($paramFetcher->get('newEmail')) { $user->setEmail($paramFetcher->get('newEmail')); }
+        if($paramFetcher->get('password')) {
+            if($paramFetcher->get('confirmPassword') == $paramFetcher->get('password')) {
+                $user->setPlainPassword($paramFetcher->get('password'));
+            }
+        }
+
+        $view = View::create();
+
+        $errors = $this->get('validator')->validate($user, array('Update user'));
 
         if(count($errors) == 0) {
             $um->updateUser($user);
