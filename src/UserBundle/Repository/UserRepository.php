@@ -39,7 +39,7 @@ class UserRepository extends EntityRepository
                 WHERE u.apiKey = :apiKey
             ')
             ->setParameter('apiKey', $apiKey)
-            ->getResult();
+            ->getSingleResult();
     }
 
     /**
