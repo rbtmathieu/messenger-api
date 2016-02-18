@@ -119,6 +119,7 @@ class MessagesController extends FOSRestController
 
 
         $em->persist($message);
+        $em->persist($conversation);
         $em->flush();
 
         // Don't return the whole message with useless and/or confidential informations
@@ -199,6 +200,7 @@ class MessagesController extends FOSRestController
      */
     private function handleConversation(User $from, ParamFetcher $paramFetcher)
     {
+        /** @var Conversation $conversation */
         $conversation = $this->getManager()->getRepository(Conversation::class)->find($paramFetcher->get('conversationId'));
 
         if (null === $conversation) {
@@ -209,18 +211,15 @@ class MessagesController extends FOSRestController
             $to = $this->getManager()->getRepository(User::class)->find($paramFetcher->get('to'));
 
             if (null !== ($from && $to)) {
-                $conversation = new Conversation($from, $to);
+                return new Conversation($from, $to);
             } else {
                 throw new NotFoundHttpException('Users provided does not exist');
             }
         }
 
-        $conversationParticipants = [
-            $conversation->getUser1(),
-            $conversation->getUser2(),
-        ];
+        $conversationParticipants = $conversation->getUsers();
 
-        if (!(in_array($from, $conversationParticipants) || in_array($to, $conversationParticipants))) {
+        if (!$conversationParticipants->contains($from)) {
             throw new AccessDeniedHttpException('Users provided don\'t take part of the conversation');
         }
 

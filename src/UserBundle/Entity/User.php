@@ -24,11 +24,6 @@ class User extends BaseUser
     private $apiKey;
 
     /**
-     * @ORM\ManyToMany(targetEntity="MessengerBundle\Entity\Conversation", cascade={"persist"})
-     */
-    protected $conversation;
-
-    /**
      * @ORM\ManyToMany(targetEntity="UserBundle\Entity\User", mappedBy="myFriends")
      **/
     private $friendWithMe;
