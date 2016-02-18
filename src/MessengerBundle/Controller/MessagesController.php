@@ -10,6 +10,7 @@ use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
 use MessengerBundle\Entity\Conversation;
 use MessengerBundle\Entity\Message;
+use MessengerBundle\Utils\Traits\GetManagersTrait;
 use MessengerBundle\Utils\ValueObject\MessageValueObject;
 use MessengerBundle\Utils\ValueObject\UserValueObject;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -28,15 +29,14 @@ use UserBundle\Entity\User;
  */
 class MessagesController extends FOSRestController
 {
+    use GetManagersTrait;
 
     // Get
 
     /**
-     * Get all messages
-     *
      * @ApiDoc(
      *  resource = true,
-     *  description = "Returns all messages",
+     *  description = "Returns all messages of a given user",
      *  statusCodes = {
      *      200 = "Returned when sucessful",
      *      404 = "Returned when no messages are found"
@@ -49,8 +49,8 @@ class MessagesController extends FOSRestController
      */
     public function cgetAction($username)
     {
-        $messageRepository = $this->getMessagesRepository();
-        $userRepository = $this->getManager()->getRepository(User::class);
+        $messageRepository = $this->getMessageRepository();
+        $userRepository = $this->getUserRepository();
 
         $user = $userRepository->findOneByUsername($username);
 
@@ -132,22 +132,6 @@ class MessagesController extends FOSRestController
     // Personnal
 
     /**
-     * @return \Doctrine\Common\Persistence\ObjectManager|object
-     */
-    private function getManager()
-    {
-        return $this->getDoctrine()->getManager();
-    }
-
-    /**
-     * @return \MessengerBundle\Repository\MessageRepository
-     */
-    private function getMessagesRepository()
-    {
-        return $this->getManager()->getRepository(Message::class);
-    }
-
-    /**
      * @param User $user
      * @return UserValueObject
      */
@@ -201,14 +185,14 @@ class MessagesController extends FOSRestController
     private function handleConversation(User $from, ParamFetcher $paramFetcher)
     {
         /** @var Conversation $conversation */
-        $conversation = $this->getManager()->getRepository(Conversation::class)->find($paramFetcher->get('conversationId'));
+        $conversation = $this->getConversationRepository()->find($paramFetcher->get('conversationId'));
 
         if (null === $conversation) {
             if (null === $paramFetcher->get('to')) {
                 throw new InvalidParameterException('You must provide a message receiver if the conversation is not already created');
             }
 
-            $to = $this->getManager()->getRepository(User::class)->find($paramFetcher->get('to'));
+            $to = $this->getUserRepository()->find($paramFetcher->get('to'));
 
             if (null !== ($from && $to)) {
                 return new Conversation($from, $to);
