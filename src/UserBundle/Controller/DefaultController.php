@@ -4,6 +4,7 @@ namespace UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use UserBundle\Entity\User;
 
 class DefaultController extends Controller
 {
@@ -31,6 +32,8 @@ class DefaultController extends Controller
         }
 
         $user1->addFriend($user2);
+
+        $em->flush();
         return new Response("Friend add");
     }
 
@@ -41,7 +44,7 @@ class DefaultController extends Controller
     public function searchFriendAction($username)
     {
         $em = $this->getDoctrine()->getManager();
-        $userRepository = $em->getRepository('UserBundle:User');
+        $userRepository = $em->getRepository(User::class);
 
         $user = $userRepository->searchFriend($username);
 

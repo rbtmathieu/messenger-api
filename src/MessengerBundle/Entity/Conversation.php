@@ -7,7 +7,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use MessengerBundle\Entity\Message;
 use UserBundle\Entity\User;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -33,21 +32,23 @@ class Conversation
     /**
      * @var Collection
      *
-     * @ORM\ManyToMany(targetEntity="MessengerBundle\Entity\Message", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="MessengerBundle\Entity\Message", cascade={"persist"}, mappedBy="conversation")
      */
     private $messages;
 
     /**
+     * @TODO Try to convert this to a collection of 2 users
      * @var User
-     * @ORM\OneToOne(targetEntity="UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\User")
      *
      * @Assert\NotBlank()
      */
     private $user1;
 
     /**
+     * @TODO Try to convert this to a collection of 2 users
      * @var User
-     * @ORM\OneToOne(targetEntity="UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\User")
      *
      * @Assert\NotBlank()
      */
@@ -107,5 +108,45 @@ class Conversation
     public function getMessages()
     {
         return $this->messages;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser1()
+    {
+        return $this->user1;
+    }
+
+    /**
+     * @param User $user1
+     *
+     * @return Conversation
+     */
+    public function setUser1(User $user1)
+    {
+        $this->user1 = $user1;
+
+        return $this;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser2()
+    {
+        return $this->user2;
+    }
+
+    /**
+     * @param User $user2
+     *
+     * @return Conversation
+     */
+    public function setUser2(User $user2)
+    {
+        $this->user2 = $user2;
+
+        return $this;
     }
 }

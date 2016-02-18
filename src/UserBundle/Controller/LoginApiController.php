@@ -2,12 +2,14 @@
 
 namespace UserBundle\Controller;
 
+use Doctrine\ORM\EntityManager;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\View\View;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Validator\Constraints\DateTime;
@@ -63,5 +65,25 @@ class LoginApiController extends FOSRestController implements ClassResourceInter
             throw new AuthenticationException('User does not exist');
         }
 
+    }
+
+    /**
+     * @param Request $request
+     * @param EntityManager $em
+     *
+     * @return User
+     * @throws AuthenticationException
+     */
+    public static function checkAuthentication(Request $request, EntityManager $em)
+    {
+        $apiKey = $request->headers->get('X-AUTH-TOKEN');
+
+        $currentUser = $em->getRepository(User::class)->findUserByApiKey($apiKey);
+
+        if (null === $currentUser) {
+            throw new AuthenticationException('Not authorized');
+        }
+
+        return $currentUser;
     }
 }

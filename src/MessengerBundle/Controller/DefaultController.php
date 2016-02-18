@@ -44,7 +44,6 @@ class DefaultController extends Controller
 
         $messageJson = json_encode($messageArray);
 
-
         $conversation = $this->newConversationAction($user[0], $user[1]);
 
         $this->newMessageAction($conversation, $messageJson);

@@ -5,6 +5,7 @@ namespace MessengerBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use UserBundle\Entity\User;
 
 /**
  * Message
@@ -16,8 +17,11 @@ class Message
 {
     use TimestampableEntity;
 
-    CONST TYPE_TEXT = 1;
-    CONST TYPE_WIZZ = 2;
+    const TYPE_TEXT = 1;
+    const TYPE_WIZZ = 2;
+
+    const TYPE_TEXT_STRING = 'text';
+    const TYPE_WIZZ_STRING = 'wizz';
 
     /**
      * @var int
@@ -48,6 +52,13 @@ class Message
      * @ORM\ManyToOne(targetEntity="UserBundle\Entity\User")
      */
     private $user;
+
+    /**
+     * @var Conversation
+     *
+     * @ORM\ManyToOne(targetEntity="MessengerBundle\Entity\Conversation", cascade={"persist"}, inversedBy="messages")
+     */
+    private $conversation;
 
     /**
      * @param string $text
@@ -120,10 +131,10 @@ class Message
     /**
      * Set user
      *
-     * @param \stdClass $user
+     * @param User $user
      * @return Message
      */
-    public function setUser($user)
+    public function setUser(User $user)
     {
         $this->user = $user;
 
@@ -138,5 +149,21 @@ class Message
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * @return Conversation
+     */
+    public function getConversation()
+    {
+        return $this->conversation;
+    }
+
+    /**
+     * @param Conversation $conversation
+     */
+    public function setConversation(Conversation $conversation)
+    {
+        $this->conversation = $conversation;
     }
 }
