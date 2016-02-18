@@ -43,25 +43,33 @@ class MessagesController extends FOSRestController
      *  }
      * )
      *
-     * @Get("/get/all")
+     * @Get("/get/{username}")
      *
      * @throws NotFoundHttpException
      */
-    public function cgetAction()
+    public function cgetAction($username)
     {
         $messageRepository = $this->getMessagesRepository();
+        $userRepository = $this->getManager()->getRepository(User::class);
 
-        /** @var Message[] $data */
-        $messages = $messageRepository->findAll();
-        if (empty($messages)) {
+        $user = $userRepository->findOneByUsername($username);
+
+        if (null === $user) {
+            throw new NotFoundHttpException('The user provided does not exist');
+        }
+
+        /** @var Message[] $messagesFromBase */
+        $messagesFromBase = $messageRepository->findByUser($user->getId());
+        if (empty($messagesFromBase)) {
             throw new NotFoundHttpException('No message found');
         }
 
         $messages = [];
-        foreach($messages as $message) {
+        foreach($messagesFromBase as $message) {
             $messages[] = new MessageValueObject(
                 $message->getId(),
                 $this->populateUserValueObject($message->getUser()),
+                $message->getConversation()->getId(),
                 $message->getText(),
                 $message->getType()
             );
