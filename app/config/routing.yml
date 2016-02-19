@@ -1,3 +1,7 @@
+admin:
+    resource: "@AdminBundle/Resources/config/routing.yml"
+    prefix: /
+
 user:
     resource: "@UserBundle/Resources/config/routing.yml"
     prefix:   /user
@@ -9,7 +13,7 @@ user-api:
 
 messenger:
     resource: "@MessengerBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix:   /messenger
 
 messenger-api:
     type: rest
