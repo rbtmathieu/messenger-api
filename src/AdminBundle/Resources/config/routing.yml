@@ -1,3 +1,9 @@
 admin_homepage:
     path:     /
     defaults: { _controller: AdminBundle:Default:index }
+
+admin_user_refresh:
+    path:     /refresh/{id}
+    defaults: { _controller: AdminBundle:Default:refreshApiKey }
+    requirements:
+        id: \d+

@@ -25,4 +25,26 @@ class DefaultController extends Controller
             'users' => $users
         ));
     }
+
+    public function refreshApiKeyAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository('UserBundle:User')->find($id);
+
+        $newApiKey = $this->generateApiKey();
+
+        $user->setApiKey($newApiKey);
+
+        $em->persist($user);
+        $em->flush();
+
+        return $this->redirectToRoute('admin_homepage');
+    }
+
+    private function generateApiKey()
+    {
+        $apiKey = substr(str_shuffle('0123456789AZERTYUIOPQSDFGHJKLMWXCVBNazertyuiopqsdfghjklmwxcvbn'), 32);
+
+        return $apiKey;
+    }
 }

@@ -26,13 +26,13 @@
                             </td>
                             <td>{{ user.apiKey }}</td>
                             <td>
-                                <button class="btn btn-info">Refresh ApiKey</button>
+                                <a class="btn btn-info" href="{{ path('admin_user_refresh', {'id': user.id}) }}">Refresh ApiKey</a>
                                 {% if user.enabled == 1 %}
-                                <button class="btn btn-warning">Ban</button>
+                                <a class="btn btn-warning">Ban</a>
                                 {% else %}
-                                <button class="btn btn-success">Unban</button>
+                                <a class="btn btn-success">Unban</a>
                                 {% endif %}
-                                <button class="btn btn-danger">Delete</button>
+                                <a class="btn btn-danger">Delete</a>
                             </td>
                         </tr>
                     {% endfor %}
