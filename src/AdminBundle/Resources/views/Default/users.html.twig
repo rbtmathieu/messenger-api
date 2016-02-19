@@ -28,9 +28,9 @@
                             <td>
                                 <a class="btn btn-info" href="{{ path('admin_user_refresh', {'id': user.id}) }}">Refresh ApiKey</a>
                                 {% if user.enabled == 1 %}
-                                <a class="btn btn-warning">Ban</a>
+                                <a class="btn btn-warning" href="{{ path('admin_user_modify_status', {'id': user.id}) }}">Ban</a>
                                 {% else %}
-                                <a class="btn btn-success">Unban</a>
+                                <a class="btn btn-success" href="{{ path('admin_user_modify_status', {'id': user.id}) }}">Unban</a>
                                 {% endif %}
                                 <a class="btn btn-danger">Delete</a>
                             </td>

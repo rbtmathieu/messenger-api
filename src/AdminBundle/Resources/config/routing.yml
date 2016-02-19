@@ -2,6 +2,12 @@ admin_homepage:
     path:     /
     defaults: { _controller: AdminBundle:Default:index }
 
+admin_user_modify_status:
+    path:     /status/{id}
+    defaults: { _controller: AdminBundle:Default:modifyUserStatus }
+    requirements:
+        id: \d+
+
 admin_user_refresh:
     path:     /refresh/{id}
     defaults: { _controller: AdminBundle:Default:refreshApiKey }

@@ -26,6 +26,37 @@ class DefaultController extends Controller
         ));
     }
 
+    /**
+     * Modify the status of an User identified by ID
+     *
+     * @param $id
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function modifyUserStatusAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository('UserBundle:User')->find($id);
+
+        if($user->isEnabled() == true) {
+            $user->setEnabled(false);
+        } else {
+            $user->setEnabled(true);
+        }
+
+        $em->persist($user);
+        $em->flush();
+
+        return $this->redirectToRoute('admin_homepage');
+    }
+
+    /**
+     * Set a new apiKey to an User identified by ID
+     *
+     * @param $id
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
     public function refreshApiKeyAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -41,6 +72,11 @@ class DefaultController extends Controller
         return $this->redirectToRoute('admin_homepage');
     }
 
+    /**
+     * Generate an apiKey
+     *
+     * @return string
+     */
     private function generateApiKey()
     {
         $apiKey = substr(str_shuffle('0123456789AZERTYUIOPQSDFGHJKLMWXCVBNazertyuiopqsdfghjklmwxcvbn'), 32);
