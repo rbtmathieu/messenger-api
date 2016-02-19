@@ -51,6 +51,24 @@ class DefaultController extends Controller
     }
 
     /**
+     * Delete an User identified by ID
+     *
+     * @param $id
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function deleteUserAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository('UserBundle:User')->find($id);
+
+        $em->remove($user);
+        $em->flush();
+
+        return $this->redirectToRoute('admin_homepage');
+    }
+
+    /**
      * Set a new apiKey to an User identified by ID
      *
      * @param $id

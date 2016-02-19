@@ -8,6 +8,12 @@ admin_user_modify_status:
     requirements:
         id: \d+
 
+admin_user_delete:
+    path:     /delete/{id}
+    defaults: { _controller: AdminBundle:Default:deleteUser }
+    requirements:
+        id: \d+
+
 admin_user_refresh:
     path:     /refresh/{id}
     defaults: { _controller: AdminBundle:Default:refreshApiKey }

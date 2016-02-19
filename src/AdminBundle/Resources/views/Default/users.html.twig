@@ -32,7 +32,7 @@
                                 {% else %}
                                 <a class="btn btn-success" href="{{ path('admin_user_modify_status', {'id': user.id}) }}">Unban</a>
                                 {% endif %}
-                                <a class="btn btn-danger">Delete</a>
+                                <a class="btn btn-danger" href="{{ path('admin_user_delete', {'id': user.id}) }}">Delete</a>
                             </td>
                         </tr>
                     {% endfor %}
