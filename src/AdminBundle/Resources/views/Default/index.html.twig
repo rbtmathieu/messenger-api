@@ -1,0 +1,9 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    {% if is_granted('ROLE_ADMIN') %}
+    {{ render(controller('AdminBundle:Default:getUsers')) }}
+    {% else %}
+        YOU ARE NOT AN ADMIN OR YOU'RE NOT LOGGED IN
+    {% endif %}
+{% endblock %}
