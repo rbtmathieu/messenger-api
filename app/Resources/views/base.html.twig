@@ -27,8 +27,8 @@
                     <div class="collapse navbar-collapse" id="navbar">
                         <ul class="nav navbar-nav">
                             {% if is_granted('ROLE_ADMIN') %}
-                            <li class="active"><a href="#">Manage users</a></li>
-                            <li><a href="#">Disconnect</a></li>
+                            <li class="active"><a href="{{ path('admin_homepage') }}">Manage users</a></li>
+                            <li><a href="{{ path('fos_user_security_logout') }}">Disconnect</a></li>
                             {% elseif is_granted('IS_AUTHENTICATED_ANONYMOUSLY') %}
                             <li><a href="{{ path('fos_user_security_login') }}">Login</a></li>
                             {% endif %}
