@@ -4,6 +4,8 @@ namespace UserBundle\Entity;
 
 use FOS\UserBundle\Entity\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use MessengerBundle\Entity\Conversation;
+use Symfony\Component\Validator\Constraints\Collection;
 
 /**
  * @ORM\Entity(repositoryClass="UserBundle\Repository\UserRepository")
@@ -37,6 +39,13 @@ class User extends BaseUser
      **/
     private $myFriends;
 
+    /**
+     * @var Collection
+     *
+     * @ORM\ManyToMany(targetEntity="MessengerBundle\Entity\Conversation", cascade={"persist"}, mappedBy="users")
+     */
+    private $conversations;
+
     public function __construct()
     {
         parent::__construct();
@@ -49,36 +58,36 @@ class User extends BaseUser
     }
 
     /**
-     * Add conversation
+     * Add conversations
      *
-     * @param \MessengerBundle\Entity\Conversation $conversation
+     * @param Conversation $conversation
      * @return User
      */
-    public function addConversation(\MessengerBundle\Entity\Conversation $conversation)
+    public function addConversation(Conversation $conversation)
     {
-        $this->conversation[] = $conversation;
+        $this->conversations[] = $conversation;
 
         return $this;
     }
 
     /**
-     * Remove conversation
+     * Remove conversations
      *
-     * @param \MessengerBundle\Entity\Conversation $conversation
+     * @param Conversation $conversation
      */
-    public function removeConversation(\MessengerBundle\Entity\Conversation $conversation)
+    public function removeConversation(Conversation $conversation)
     {
-        $this->conversation->removeElement($conversation);
+        $this->conversations->removeElement($conversation);
     }
 
     /**
-     * Get conversation
+     * Get conversations
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getConversation()
+    public function getConversations()
     {
-        return $this->conversation;
+        return $this->conversations;
     }
 
     /**

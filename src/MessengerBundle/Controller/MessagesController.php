@@ -11,8 +11,8 @@ use FOS\RestBundle\View\View;
 use MessengerBundle\Entity\Conversation;
 use MessengerBundle\Entity\Message;
 use MessengerBundle\Utils\Traits\GetManagersTrait;
+use MessengerBundle\Utils\Traits\PopulateValueObjectsTrait;
 use MessengerBundle\Utils\ValueObject\MessageValueObject;
-use MessengerBundle\Utils\ValueObject\UserValueObject;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -30,6 +30,7 @@ use UserBundle\Entity\User;
 class MessagesController extends FOSRestController
 {
     use GetManagersTrait;
+    use PopulateValueObjectsTrait;
 
     // Get
 
@@ -132,29 +133,6 @@ class MessagesController extends FOSRestController
     // Personnal
 
     /**
-     * @param User $user
-     * @return UserValueObject
-     */
-    private function populateUserValueObject(User $user)
-    {
-        return new UserValueObject($user->getId(), $user->getUsername(), $user->getEmail());
-    }
-
-    /**
-     * @param Message $message
-     * @param User $from
-     *
-     * @return MessageValueObject
-     */
-    private function populateMessageValueObject(Message $message, User $from)
-    {
-        $from = $this->populateUserValueObject($from);
-        $conversation = $message->getConversation()->getId();
-
-        return new MessageValueObject($message->getId(), $from, $conversation, $message->getText());
-    }
-
-    /**
      * @param $message
      * @param $type
      *
@@ -188,22 +166,20 @@ class MessagesController extends FOSRestController
         $conversation = $this->getConversationRepository()->find($paramFetcher->get('conversationId'));
 
         if (null === $conversation) {
-            if (null === $paramFetcher->get('to')) {
+            $to = $paramFetcher->get('to');
+            if (null === $to) {
                 throw new InvalidParameterException('You must provide a message receiver if the conversation is not already created');
             }
 
             $to = $this->getUserRepository()->find($paramFetcher->get('to'));
 
-            if (null !== ($from && $to)) {
-                return new Conversation($from, $to);
-            } else {
-                throw new NotFoundHttpException('Users provided does not exist');
-            }
+            $conversationHandler = $this->get('messenger.conversation_handler');
+            $conversation = $conversationHandler->createConversation($from, $to);
         }
 
-        $conversationParticipants = $conversation->getUsers();
+        $conversationUser = $conversation->getUsers();
 
-        if (!$conversationParticipants->contains($from)) {
+        if (!in_array($from, $conversationUser->toArray())) {
             throw new AccessDeniedHttpException('Users provided don\'t take part of the conversation');
         }
 

@@ -12,4 +12,20 @@ use Doctrine\ORM\EntityRepository;
  */
 class ConversationRepository extends EntityRepository
 {
+    public function findByParticipants($participant)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        return $qb
+            ->from('MessengerBundle:Conversation', 'conversation')
+            ->join('conversation.users', 'users')
+            ->select([
+                'conversation',
+                'users',
+            ])
+            ->where('users.id = :id')
+            ->setParameter('id', $participant)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

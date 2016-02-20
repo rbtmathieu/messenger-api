@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Routing\Exception\InvalidParameterException;
 use UserBundle\Entity\User;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -14,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Message
  *
  * @ORM\Table(name="conversation")
- * @ORM\Entity(repositoryClass="MessengerBundle\Repository\MessageRepository")
+ * @ORM\Entity(repositoryClass="MessengerBundle\Repository\ConversationRepository")
  */
 class Conversation
 {
@@ -41,7 +42,7 @@ class Conversation
     /**
      * @var Collection
      *
-     * @ORM\ManyToMany(targetEntity="UserBundle\Entity\User", cascade={"persist"}, )
+     * @ORM\ManyToMany(targetEntity="UserBundle\Entity\User", cascade={"persist"}, inversedBy="conversations")
      */
     private $users;
 
@@ -53,9 +54,10 @@ class Conversation
     public function __construct(User $user1, User $user2)
     {
         $this->messages = new ArrayCollection();
+        $this->users = new ArrayCollection();
 
-        $this->users[] = $user1;
-        $this->users[] = $user2;
+        $this->users->add($user1);
+        $this->users->add($user2);
     }
 
     /**
@@ -134,7 +136,7 @@ class Conversation
             throw new \BadMethodCallException('Conversations are only composed of '. self::LIMIT_USERS .' users');
         }
 
-        $this->users[] = $user;
+        $this->users->add($user);
 
         return $this;
     }
