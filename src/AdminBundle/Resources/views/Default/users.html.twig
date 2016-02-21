@@ -1,0 +1,42 @@
+<div class="container">
+    <div class="row">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td>#</td>
+                        <td>Username</td>
+                        <td>Email</td>
+                        <td>Status</td>
+                        <td>ApiKey</td>
+                        <td>Actions</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>
+                                {% if user.enabled == 1 %}
+                                    Enabled
+                                {% else %}
+                                    Banned
+                                {% endif %}
+                            </td>
+                            <td>{{ user.apiKey }}</td>
+                            <td>
+                                <a class="btn btn-info" href="{{ path('admin_user_refresh', {'id': user.id}) }}">Refresh ApiKey</a>
+                                {% if user.enabled == 1 %}
+                                <a class="btn btn-warning" href="{{ path('admin_user_modify_status', {'id': user.id}) }}">Ban</a>
+                                {% else %}
+                                <a class="btn btn-success" href="{{ path('admin_user_modify_status', {'id': user.id}) }}">Unban</a>
+                                {% endif %}
+                                <a class="btn btn-danger" href="{{ path('admin_user_delete', {'id': user.id}) }}">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+    </div>
+</div>
