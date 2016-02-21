@@ -3,7 +3,12 @@
 namespace UserBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use MessengerBundle\Entity\Conversation;
 
+/**
+ * Class UserRepository
+ * @package UserBundle\Repository
+ */
 class UserRepository extends EntityRepository
 {
     /**
@@ -28,7 +33,7 @@ class UserRepository extends EntityRepository
     /**
      * @param string $apiKey
      *
-     * @return array
+     * @return Conversation
      */
     public function findUserByApiKey($apiKey)
     {
@@ -60,5 +65,26 @@ class UserRepository extends EntityRepository
         $username = $results->getResult();
 
         return $username;
+    }
+
+    /**
+     * @param $username
+     * @return array
+     */
+    public function findOneByUsernameWithConversations($username)
+    {
+        return $this->getEntityManager()
+            ->createQueryBuilder()
+            ->from('UserBundle:User', 'user')
+            ->innerJoin('user.conversations', 'conversations')
+            ->select([
+                'user',
+                'conversations',
+            ])
+            ->where('user.username = :username')
+            ->setParameter('username', $username)
+            ->getQuery()
+            ->getSingleResult()
+        ;
     }
 }

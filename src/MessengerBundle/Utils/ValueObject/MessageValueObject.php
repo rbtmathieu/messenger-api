@@ -2,6 +2,7 @@
 namespace MessengerBundle\Utils\ValueObject;
 
 use MessengerBundle\Entity\Conversation;
+use UserBundle\Entity\User;
 
 /**
  * Class MessageValueObject

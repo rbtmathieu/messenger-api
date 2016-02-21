@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Routing\Exception\InvalidParameterException;
 use UserBundle\Entity\User;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -14,11 +15,13 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Message
  *
  * @ORM\Table(name="conversation")
- * @ORM\Entity(repositoryClass="MessengerBundle\Repository\MessageRepository")
+ * @ORM\Entity(repositoryClass="MessengerBundle\Repository\ConversationRepository")
  */
 class Conversation
 {
     use TimestampableEntity;
+
+    const LIMIT_USERS = 2;
 
     /**
      * @var int
@@ -37,22 +40,11 @@ class Conversation
     private $messages;
 
     /**
-     * @TODO Try to convert this to a collection of 2 users
-     * @var User
-     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\User")
+     * @var Collection
      *
-     * @Assert\NotBlank()
+     * @ORM\ManyToMany(targetEntity="UserBundle\Entity\User", cascade={"persist"}, inversedBy="conversations")
      */
-    private $user1;
-
-    /**
-     * @TODO Try to convert this to a collection of 2 users
-     * @var User
-     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\User")
-     *
-     * @Assert\NotBlank()
-     */
-    private $user2;
+    private $users;
 
     /**
      * Constructor
@@ -62,9 +54,10 @@ class Conversation
     public function __construct(User $user1, User $user2)
     {
         $this->messages = new ArrayCollection();
+        $this->users = new ArrayCollection();
 
-        $this->user1 = $user1;
-        $this->user2 = $user2;
+        $this->users->add($user1);
+        $this->users->add($user2);
     }
 
     /**
@@ -111,41 +104,39 @@ class Conversation
     }
 
     /**
-     * @return User
+     * @return Collection
      */
-    public function getUser1()
+    public function getUsers()
     {
-        return $this->user1;
+        return $this->users;
     }
 
     /**
-     * @param User $user1
-     *
+     * @param Collection $users
      * @return Conversation
      */
-    public function setUser1(User $user1)
+    public function setUsers(Collection $users)
     {
-        $this->user1 = $user1;
+        if ($sers->count() >= self::LIMIT_USERS) {
+            throw new \BadMethodCallException('Conversations are only composed of '. self::LIMIT_USERS .' users');
+        }
+
+        $this->users = $users;
 
         return $this;
     }
 
     /**
-     * @return User
-     */
-    public function getUser2()
-    {
-        return $this->user2;
-    }
-
-    /**
-     * @param User $user2
-     *
+     * @param User $user
      * @return Conversation
      */
-    public function setUser2(User $user2)
+    public function addUser($user)
     {
-        $this->user2 = $user2;
+        if ($this->users->count() >= self::LIMIT_USERS) {
+            throw new \BadMethodCallException('Conversations are only composed of '. self::LIMIT_USERS .' users');
+        }
+
+        $this->users->add($user);
 
         return $this;
     }
