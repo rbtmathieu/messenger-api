@@ -1,9 +1,9 @@
 messages:
     type:     rest
-    resource: @MessengerBundle/Controller/MessagesController.php
+    resource: '@MessengerBundle/Controller/MessagesController.php'
     prefix: messages
 
 conversations:
     type:     rest
-    resource: @MessengerBundle/Controller/ConversationsController.php
+    resource: '@MessengerBundle/Controller/ConversationsController.php'
     prefix: conversations

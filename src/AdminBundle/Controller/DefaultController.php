@@ -6,6 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class DefaultController extends Controller
 {
+    const API_KEY_LENGTH = 30;
+
     public function indexAction()
     {
         return $this->render('AdminBundle:Default:index.html.twig');
@@ -97,7 +99,7 @@ class DefaultController extends Controller
      */
     private function generateApiKey()
     {
-        $apiKey = substr(str_shuffle('0123456789AZERTYUIOPQSDFGHJKLMWXCVBNazertyuiopqsdfghjklmwxcvbn'), 32);
+        $apiKey = substr(str_shuffle('0123456789AZERTYUIOPQSDFGHJKLMWXCVBNazertyuiopqsdfghjklmwxcvbn'), 62 - self::API_KEY_LENGTH);
 
         return $apiKey;
     }
