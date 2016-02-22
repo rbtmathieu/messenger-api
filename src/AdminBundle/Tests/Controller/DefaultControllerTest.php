@@ -7,7 +7,7 @@ use AdminBundle\Controller\DefaultController;
 
 class DefaultControllerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testIndex()
+    public function testGenerateApiKey()
     {
         $generateApiKey = $this->getMethod('generateApiKey');
         $defaultController = new DefaultController();
