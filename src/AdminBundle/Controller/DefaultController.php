@@ -6,7 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class DefaultController extends Controller
 {
-    const API_KEY_LENGTH = 30;
 
     public function indexAction()
     {
@@ -79,28 +78,9 @@ class DefaultController extends Controller
      */
     public function refreshApiKeyAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('UserBundle:User')->find($id);
-
-        $newApiKey = $this->generateApiKey();
-
-        $user->setApiKey($newApiKey);
-
-        $em->persist($user);
-        $em->flush();
+        $refresh = $this->get('admin.refresh_apikeys');
+        $refresh->refresh($id);
 
         return $this->redirectToRoute('admin_homepage');
-    }
-
-    /**
-     * Generate an apiKey
-     *
-     * @return string
-     */
-    private function generateApiKey()
-    {
-        $apiKey = substr(str_shuffle('0123456789AZERTYUIOPQSDFGHJKLMWXCVBNazertyuiopqsdfghjklmwxcvbn'), 62 - self::API_KEY_LENGTH);
-
-        return $apiKey;
     }
 }
