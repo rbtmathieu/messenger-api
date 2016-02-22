@@ -7,15 +7,15 @@ use AdminBundle\Controller\DefaultController;
 
 class DefaultControllerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGenerateApiKey()
-    {
-        $generateApiKey = $this->getMethod('generateApiKey');
-        $defaultController = new DefaultController();
-
-        $key = $generateApiKey->invoke($defaultController);
-
-        $this->assertEquals(DefaultController::API_KEY_LENGTH, strlen($key));
-    }
+//    public function testGenerateApiKey()
+//    {
+//        $generateApiKey = $this->getMethod('generateApiKey');
+//        $defaultController = new DefaultController();
+//
+//        $key = $generateApiKey->invoke($defaultController);
+//
+//        $this->assertEquals(DefaultController::API_KEY_LENGTH, strlen($key));
+//    }
 
     public function getMethod($name)
     {
