@@ -38,6 +38,23 @@ class RefreshApiKeys
     }
 
     /**
+     * Refresh the apiKey of an User identified by ID
+     *
+     * @param int $id Id of the User
+     */
+    public function refresh($id)
+    {
+        $user = $this->em->getRepository('UserBundle:User')->find($id);
+
+        $apiKey = $this->generateApiKey();
+
+        $user->setApiKey($apiKey);
+
+        $this->em->persist($user);
+        $this->em->flush();
+    }
+
+    /**
      * Generate an apiKey
      *
      * @return string
