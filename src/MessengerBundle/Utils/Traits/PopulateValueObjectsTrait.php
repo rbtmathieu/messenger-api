@@ -6,6 +6,7 @@ use MessengerBundle\Entity\Message;
 use MessengerBundle\Utils\ValueObject\ConversationValueObject;
 use MessengerBundle\Utils\ValueObject\MessageValueObject;
 use MessengerBundle\Utils\ValueObject\UserValueObject;
+use Symfony\Component\Routing\Exception\InvalidParameterException;
 use UserBundle\Entity\User;
 
 trait PopulateValueObjectsTrait
@@ -25,8 +26,16 @@ trait PopulateValueObjectsTrait
      *
      * @return MessageValueObject
      */
-    private function populateMessageValueObject(Message $message, User $from)
+    private function populateMessageValueObject(Message $message, User $from = null)
     {
+        if (null === $from) {
+            $from = $message->getUser();
+        }
+
+        if (null === $from) {
+            throw new InvalidParameterException('You must provide the user who wrote the message');
+        }
+
         $from = $this->populateUserValueObject($from);
         $conversation = $message->getConversation()->getId();
 

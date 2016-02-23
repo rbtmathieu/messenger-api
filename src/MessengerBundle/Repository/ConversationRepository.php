@@ -28,4 +28,21 @@ class ConversationRepository extends EntityRepository
             ->getResult()
         ;
     }
+
+    public function findWithMessages($conversationId)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        return $qb
+            ->from('MessengerBundle:Conversation', 'conversation')
+            ->join('conversation.messages', 'messages')
+            ->select([
+                'conversation',
+                'messages',
+            ])
+            ->where('conversation.id = :id')
+            ->setParameter('id', $conversationId)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }
