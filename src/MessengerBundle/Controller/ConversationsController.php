@@ -5,12 +5,11 @@ use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use MessengerBundle\Entity\Conversation;
 use MessengerBundle\Utils\Traits\GetManagersTrait;
 use MessengerBundle\Utils\Traits\PopulateValueObjectsTrait;
-use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Controller\FOSRestController;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use UserBundle\Controller\LoginApiController;
@@ -26,50 +25,7 @@ class ConversationsController extends FOSRestController
     use GetManagersTrait;
     use PopulateValueObjectsTrait;
 
-    // Get
-
-    /**
-     * @ApiDoc(
-     *  resource = true,
-     *  description = "Returns all conversations of an user",
-     *  statusCodes = {
-     *      200 = "Returned when sucessful",
-     *      404 = "Returned when no messages are found"
-     *  }
-     * )
-     *
-     * @Get("/get/{username}")
-     *
-     * @throws NotFoundHttpException
-     */
-    public function cgetAction($username)
-    {
-        $userRepository = $this->getUserRepository();
-
-        $user = $userRepository->findOneByUsernameWithConversations($username);
-
-        if (null === $user) {
-            throw new NotFoundHttpException('The user provided does not exist');
-        }
-
-        /** @var Conversation[] $conversationsFromBase */
-        $conversationsFromBase = $user->getConversations();
-
-        if (empty($conversationsFromBase)) {
-            throw new NotFoundHttpException('No message found');
-        }
-
-        $conversations = [];
-        foreach($conversationsFromBase as $conversation) {
-            $conversationValueObject = $this->populateConversationValueObject($conversation);
-
-            $conversations[] = $conversationValueObject;
-        }
-
-        $view = $this->view($conversations);
-
-        return $this->handleView($view);
-    }
+    // GET
 
     /**
      * @ApiDoc(
@@ -90,18 +46,14 @@ class ConversationsController extends FOSRestController
         $conversationRepository = $this->getConversationRepository();
         /** @var Conversation $conversation */
         $conversation = $conversationRepository->findWithMessages($id);
-
         if (null === $conversation) {
             throw new NotFoundHttpException('No conversation found');
         }
-
         $messagesFromBase = $conversation->getMessages();
-
         $messages = [];
         foreach($messagesFromBase as $message) {
             $messages[] = $this->populateMessageValueObject($message);
         }
-
         return $this->view($messages);
     }
 
