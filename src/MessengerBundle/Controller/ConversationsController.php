@@ -12,6 +12,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use UserBundle\Controller\LoginApiController;
 
 /**
@@ -68,6 +69,40 @@ class ConversationsController extends FOSRestController
         $view = $this->view($conversations);
 
         return $this->handleView($view);
+    }
+
+    /**
+     * @ApiDoc(
+     *  resource = true,
+     *  description = "Returns all messages of a conversation",
+     *  statusCodes = {
+     *      200 = "Returned when sucessful",
+     *      404 = "Returned when no messages are found"
+     *  }
+     * )
+     *
+     * @Get("/get/messages/{id}")
+     *
+     * @throws NotFoundHttpException
+     */
+    public function getMessagesAction($id)
+    {
+        $conversationRepository = $this->getConversationRepository();
+        /** @var Conversation $conversation */
+        $conversation = $conversationRepository->findWithMessages($id);
+
+        if (null === $conversation) {
+            throw new NotFoundHttpException('No conversation found');
+        }
+
+        $messagesFromBase = $conversation->getMessages();
+
+        $messages = [];
+        foreach($messagesFromBase as $message) {
+            $messages[] = $this->populateMessageValueObject($message);
+        }
+
+        return $this->view($messages);
     }
 
     // Post
