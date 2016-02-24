@@ -218,9 +218,12 @@ class UserApiController extends FOSRestController
         $user->addFriend($friend);
         $em->flush();
 
+        $users[] = $this->populateUserValueObject($user);
+        $users[] = $this->populateUserValueObject($friend);
+
         $view = View::create();
 
-        return $view->setData($user, $friend)->setStatusCode(200);
+        return $view->setData($users)->setStatusCode(200);
     }
 
     /**
@@ -259,9 +262,12 @@ class UserApiController extends FOSRestController
         $user->removeMyFriend($friend);
         $em->flush();
 
+        $users[] = $this->populateUserValueObject($user);
+        $users[] = $this->populateUserValueObject($friend);
+
         $view = View::create();
 
-        return $view->setData($user, $friend)->setStatusCode(200);
+        return $view->setData($users)->setStatusCode(200);
     }
 
 
@@ -286,10 +292,14 @@ class UserApiController extends FOSRestController
     public function searchFriendAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $users = $em->getRepository('UserBundle:User')
+        $usersSearch = $em->getRepository('UserBundle:User')
             ->searchFriend($request->get('q'));
 
         $view = View::create();
+
+        foreach($usersSearch as $user) {
+            $users[] = $this->populateUserValueObject($user);
+        }
 
         return $view->setData($users)->setStatusCode(200);
     }
