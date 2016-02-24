@@ -2,12 +2,15 @@
 
 namespace UserBundle\Controller;
 
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\View\View;
+use MessengerBundle\Utils\Traits\GetManagersTrait;
+use MessengerBundle\Utils\Traits\PopulateValueObjectsTrait;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Validator\Constraints\DateTime;
@@ -19,6 +22,52 @@ use Symfony\Component\HttpFoundation\Request;
 
 class UserApiController extends FOSRestController
 {
+    use GetManagersTrait;
+    use PopulateValueObjectsTrait;
+
+    /**
+     * @ApiDoc(
+     *  resource = true,
+     *  description = "Returns all conversations of an user",
+     *  statusCodes = {
+     *      200 = "Returned when sucessful",
+     *      404 = "Returned when no messages are found"
+     *  }
+     * )
+     *
+     * @Get("/user/get/conversation/{username}")
+     *
+     * @throws NotFoundHttpException
+     */
+    public function getUserConversationsAction($username)
+    {
+        $userRepository = $this->getUserRepository();
+
+        $user = $userRepository->findOneByUsernameWithConversations($username);
+
+        if (null === $user) {
+            throw new NotFoundHttpException('The user provided does not exist');
+        }
+
+        /** @var Conversation[] $conversationsFromBase */
+        $conversationsFromBase = $user->getConversations();
+
+        if (empty($conversationsFromBase)) {
+            throw new NotFoundHttpException('No message found');
+        }
+
+        $conversations = [];
+        foreach($conversationsFromBase as $conversation) {
+            $conversationValueObject = $this->populateConversationValueObject($conversation);
+
+            $conversations[] = $conversationValueObject;
+        }
+
+        $view = $this->view($conversations);
+
+        return $this->handleView($view);
+    }
+
     /**
      * Create an User with sent data
      *
