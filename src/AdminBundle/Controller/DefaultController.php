@@ -36,17 +36,8 @@ class DefaultController extends Controller
      */
     public function modifyUserStatusAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('UserBundle:User')->find($id);
-
-        if($user->isEnabled() == true) {
-            $user->setEnabled(false);
-        } else {
-            $user->setEnabled(true);
-        }
-
-        $em->persist($user);
-        $em->flush();
+        $status = $this->get('admin.change_user_status');
+        $status->changeStatus($id);
 
         return $this->redirectToRoute('admin_homepage');
     }

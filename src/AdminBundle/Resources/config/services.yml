@@ -5,3 +5,7 @@ services:
      admin.refresh_apikeys:
         class: AdminBundle\Service\RefreshApiKeys
         arguments: ['@doctrine.orm.entity_manager']
+
+     admin.change_user_status:
+        class: AdminBundle\Service\ChangeUserStatus
+        arguments: ['@doctrine.orm.entity_manager']
