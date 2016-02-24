@@ -2,6 +2,8 @@
 
 namespace UserBundle\Controller;
 
+use Doctrine\Instantiator\Exception\UnexpectedValueException;
+use Doctrine\ORM\NoResultException;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
@@ -219,6 +221,52 @@ class UserApiController extends FOSRestController
     }
 
     /**
+     * Return a friend identified by ID of an User NEED X-AUTH-TOKEN
+     *
+     * @ApiDoc(
+     *  resource = true,
+     *  description = "Return a friend identified by ID of an User NEED X-AUTH-TOKEN",
+     *  statusCodes = {
+     *      200 = "Returned when successful",
+     *      403 = "Returned when forbidden",
+     *      404 = "Returned when data is not found",
+     *      500 = "Returned when user given is not in User's friends list"
+     *  }
+     * )
+     *
+     * @param Request $request
+     *
+     * @RequestParam(name="friendId", nullable=false, strict=true, description="Id of the friend")
+     *
+     * @throws NotFoundHttpException If friend not found
+     * @throws UnexpectedValueException If supposed friend is not a friend with the user
+     *
+     * @return View
+     */
+    public function getUserFriendAction(Request $request)
+    {
+        $apiKey = $request->headers->get('X-AUTH-TOKEN');
+
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository('UserBundle:User')->findUserByApiKey($apiKey);
+        $friend = $em->getRepository('UserBundle:User')->find($request->get('friendId'));
+
+        if(null === $friend) {
+            throw new NotFoundHttpException('User could not be found');
+        }
+
+        if($user->getMyFriends()->contains($friend)) {
+            $view = View::create();
+
+            $friend = $this->populateUserValueObject($friend);
+
+            return $view->setData($friend)->setStatusCode(200);
+        } else {
+            throw new UnexpectedValueException($friend->getUsername() . ' is not in the friends list of ' . $user->getUsername());
+        }
+    }
+
+    /**
      * Add a friend identified by its ID to an User NEED X-AUTH-TOKEN
      *
      * @ApiDoc(
@@ -289,7 +337,7 @@ class UserApiController extends FOSRestController
 
         $em = $this->getDoctrine()->getManager();
         $user = $em->getRepository('UserBundle:User')->findUserByApiKey($apiKey);
-        $friend = $em ->getRepository('UserBundle:User')->find($paramFetcher->get('friendId'));
+        $friend = $em->getRepository('UserBundle:User')->find($paramFetcher->get('friendId'));
 
         if(null === $user || null == $friend) {
             throw new NotFoundHttpException('User could not be found');
