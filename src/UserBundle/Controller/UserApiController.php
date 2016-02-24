@@ -183,6 +183,42 @@ class UserApiController extends FOSRestController
     }
 
     /**
+     * Returns all friends of an User NEED X-AUTH-TOKEN
+     *
+     * @ApiDoc(
+     *  resource = true,
+     *  description= "Returns all friends of an User NEED X-AUTH-TOKEN",
+     *  statusCodes = {
+     *      200 = "Returned when successful",
+     *      403 = "Returned when forbidden"
+     *  }
+     * )
+     *
+     * @Get("/user/friends")
+     *
+     * @param Request $request
+     *
+     * @return View
+     */
+    public function getUserFriendsAction(Request $request)
+    {
+        $apiKey = $request->headers->get('X-AUTH-TOKEN');
+
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository('UserBundle:User')->findUserByApiKey($apiKey);
+
+        $getFriends = $user->getMyFriends();
+
+        $view = View::create();
+
+        foreach($getFriends as $friend) {
+            $friends[] = $this->populateUserValueObject($friend);
+        }
+
+        return $view->setData($friends)->setStatusCode(200);
+    }
+
+    /**
      * Add a friend identified by its ID to an User NEED X-AUTH-TOKEN
      *
      * @ApiDoc(
