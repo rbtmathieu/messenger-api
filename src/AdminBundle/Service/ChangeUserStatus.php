@@ -9,7 +9,7 @@ class ChangeUserStatus
     private $em;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param EntityManager $em
      */
@@ -19,7 +19,7 @@ class ChangeUserStatus
     }
 
     /**
-     * Change the status of an User identified by ID
+     * Change the status of an User identified by ID.
      *
      * @param int $id Id of the User
      */
@@ -27,7 +27,7 @@ class ChangeUserStatus
     {
         $user = $this->em->getRepository('UserBundle:User')->find($id);
 
-        if($user->isEnabled() == true) {
+        if ($user->isEnabled() == true) {
             $user->setEnabled(false);
         } else {
             $user->setEnabled(true);

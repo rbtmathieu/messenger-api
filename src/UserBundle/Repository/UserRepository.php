@@ -6,15 +6,16 @@ use Doctrine\ORM\EntityRepository;
 use MessengerBundle\Entity\Conversation;
 
 /**
- * Class UserRepository
- * @package UserBundle\Repository
+ * Class UserRepository.
  */
 class UserRepository extends EntityRepository
 {
     /**
      * @param $email
      * @param $slug
+     *
      * @return mixed
+     *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function findOneOrNullUserByEmail($email, $slug)
@@ -49,6 +50,7 @@ class UserRepository extends EntityRepository
 
     /**
      * @param $username
+     *
      * @return array
      */
     public function searchFriend($username)
@@ -69,6 +71,7 @@ class UserRepository extends EntityRepository
 
     /**
      * @param $username
+     *
      * @return array
      */
     public function findOneByUsernameWithConversations($username)

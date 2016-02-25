@@ -1,4 +1,5 @@
 <?php
+
 namespace MessengerBundle\Utils\ValueObject;
 
 class UserValueObject
@@ -11,6 +12,7 @@ class UserValueObject
 
     /**
      * UserValueObject constructor.
+     *
      * @param $id
      * @param $username
      * @param $email

@@ -26,6 +26,6 @@ class ChangeUserStatusCommand extends ContainerAwareCommand
         $status = $this->getContainer()->get('admin.change_user_status');
 
         $status->changeStatus($id);
-        $outputInterface->writeln('Status of User #' . $id . ' has been changed.');
+        $outputInterface->writeln('Status of User #'.$id.' has been changed.');
     }
 }

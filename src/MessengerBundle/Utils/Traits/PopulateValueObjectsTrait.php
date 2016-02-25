@@ -1,4 +1,5 @@
 <?php
+
 namespace MessengerBundle\Utils\Traits;
 
 use MessengerBundle\Entity\Conversation;
@@ -13,6 +14,7 @@ trait PopulateValueObjectsTrait
 {
     /**
      * @param User $user
+     *
      * @return UserValueObject
      */
     private function populateUserValueObject(User $user)
@@ -22,7 +24,7 @@ trait PopulateValueObjectsTrait
 
     /**
      * @param Message $message
-     * @param User $from
+     * @param User    $from
      *
      * @return MessageValueObject
      */
@@ -46,6 +48,7 @@ trait PopulateValueObjectsTrait
      * @param Conversation $conversation
      *
      * @return ConversationValueObject
+     *
      * @throws NotFoundHttpException
      */
     private function populateConversationValueObject(Conversation $conversation)
@@ -61,7 +64,7 @@ trait PopulateValueObjectsTrait
             throw new NotFoundHttpException('This conversation does not have enough participants');
         }
 
-        foreach($conversation->getUsers() as $user) {
+        foreach ($conversation->getUsers() as $user) {
             $users[] = $this->populateUserValueObject($user);
         }
 

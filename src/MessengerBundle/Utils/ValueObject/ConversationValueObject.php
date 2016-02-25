@@ -1,11 +1,11 @@
 <?php
+
 namespace MessengerBundle\Utils\ValueObject;
 
 use Doctrine\Common\Collections\Collection;
 
 /**
- * Class ConversationValueObject
- * @package MessengerBundle\Utils\ValueObject
+ * Class ConversationValueObject.
  */
 class ConversationValueObject
 {
@@ -26,6 +26,7 @@ class ConversationValueObject
 
     /**
      * ConversationValueObject constructor.
+     *
      * @param int $id
      * @param int $messagesCount
      */

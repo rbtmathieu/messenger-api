@@ -58,9 +58,10 @@ class User extends BaseUser
     }
 
     /**
-     * Add conversations
+     * Add conversations.
      *
      * @param Conversation $conversation
+     *
      * @return User
      */
     public function addConversation(Conversation $conversation)
@@ -71,7 +72,7 @@ class User extends BaseUser
     }
 
     /**
-     * Remove conversations
+     * Remove conversations.
      *
      * @param Conversation $conversation
      */
@@ -81,9 +82,9 @@ class User extends BaseUser
     }
 
     /**
-     * Get conversations
+     * Get conversations.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getConversations()
     {
@@ -91,7 +92,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set apiToken
+     * Set apiToken.
      *
      * @param string $apiToken
      *
@@ -105,7 +106,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get apiToken
+     * Get apiToken.
      *
      * @return string
      */
@@ -115,7 +116,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set apiKey
+     * Set apiKey.
      *
      * @param string $apiKey
      *
@@ -129,7 +130,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get apiKey
+     * Get apiKey.
      *
      * @return string
      */
@@ -139,9 +140,10 @@ class User extends BaseUser
     }
 
     /**
-     * Add friend
+     * Add friend.
      *
      * @param friend
+     *
      * @return user
      */
     public function addFriend(User $friend)
@@ -152,9 +154,10 @@ class User extends BaseUser
     }
 
     /**
-     * Add friendWithMe
+     * Add friendWithMe.
      *
      * @param \UserBundle\Entity\User $friendWithMe
+     *
      * @return User
      */
     public function addFriendWithMe(\UserBundle\Entity\User $friendWithMe)
@@ -189,7 +192,7 @@ class User extends BaseUser
     }
 
     /**
-     * Remove friendWithMe
+     * Remove friendWithMe.
      *
      * @param \UserBundle\Entity\User $friendWithMe
      */
@@ -199,9 +202,10 @@ class User extends BaseUser
     }
 
     /**
-     * Add myFriends
+     * Add myFriends.
      *
      * @param \UserBundle\Entity\User $myFriends
+     *
      * @return User
      */
     public function addMyFriend(\UserBundle\Entity\User $myFriends)
@@ -212,7 +216,7 @@ class User extends BaseUser
     }
 
     /**
-     * Remove myFriends
+     * Remove myFriends.
      *
      * @param \UserBundle\Entity\User $myFriends
      */
@@ -222,7 +226,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get myFriends
+     * Get myFriends.
      *
      * @return \Doctrine\Common\Collections\Collection
      */

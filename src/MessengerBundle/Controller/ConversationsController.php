@@ -1,4 +1,5 @@
 <?php
+
 namespace MessengerBundle\Controller;
 
 use FOS\RestBundle\Controller\Annotations\Get;
@@ -15,8 +16,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use UserBundle\Controller\LoginApiController;
 
 /**
- * Class ConversationsController
- * @package MessengerBundle\Controller
+ * Class ConversationsController.
  *
  * @RouteResource("Conversation")
  */
@@ -51,16 +51,16 @@ class ConversationsController extends FOSRestController
         }
         $messagesFromBase = $conversation->getMessages();
         $messages = [];
-        foreach($messagesFromBase as $message) {
+        foreach ($messagesFromBase as $message) {
             $messages[] = $this->populateMessageValueObject($message);
         }
+
         return $this->view($messages);
     }
 
     // Post
 
     /**
-     *
      * @ApiDoc(
      *  resource = true,
      *  description = "Create a new conversation NEED X-AUTH-TOKEN",
@@ -72,9 +72,10 @@ class ConversationsController extends FOSRestController
      * )
      *
      * @param ParamFetcher $paramFetcher
-     * @param Request $request
+     * @param Request      $request
      *
      * @return View
+     *
      * @throws \HttpInvalidParamException
      *
      * @Post("/new")
@@ -113,6 +114,7 @@ class ConversationsController extends FOSRestController
     /**
      * @param $user1
      * @param $user2
+     *
      * @return bool
      */
     private function conversationWithBothParticipantsAlreadyExists($user1, $user2)
@@ -122,7 +124,7 @@ class ConversationsController extends FOSRestController
         $user1Conversations = $conversationRepository->findByParticipants($user1->getId());
         $user2Conversations = $conversationRepository->findByParticipants($user2->getId());
 
-        foreach($user1Conversations as $conversation) {
+        foreach ($user1Conversations as $conversation) {
             if (in_array($conversation, $user2Conversations)) {
                 return true;
             }

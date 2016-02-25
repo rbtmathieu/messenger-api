@@ -9,7 +9,6 @@ use UserBundle\Entity\User;
 
 class ConversationControllerTest extends WebTestCase
 {
-
     public function testNormalConversationHandlerUsage()
     {
         $client = static::createClient();
@@ -51,7 +50,7 @@ class ConversationControllerTest extends WebTestCase
         $exception = null;
         try {
             $conversation = $conversationHandler->createConversation($user1, $user2);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $exception = $e;
         }
         $this->assertNotNull($exception);

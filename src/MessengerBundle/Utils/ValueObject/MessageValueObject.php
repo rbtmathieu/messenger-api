@@ -1,12 +1,12 @@
 <?php
+
 namespace MessengerBundle\Utils\ValueObject;
 
 use MessengerBundle\Entity\Conversation;
 use UserBundle\Entity\User;
 
 /**
- * Class MessageValueObject
- * @package MessengerBundle\ValueObject
+ * Class MessageValueObject.
  */
 class MessageValueObject
 {
@@ -37,6 +37,7 @@ class MessageValueObject
 
     /**
      * MessageValueObject constructor.
+     *
      * @param $id
      * @param UserValueObject $user
      * @param $conversationId
@@ -50,7 +51,6 @@ class MessageValueObject
         $this->conversationId = $conversationId;
         $this->text = $text;
         $this->type = $type;
-
     }
 
     /**
@@ -70,7 +70,6 @@ class MessageValueObject
     }
 
     /**
-     * @return null
      */
     public function getText()
     {

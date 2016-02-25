@@ -2,7 +2,6 @@
 
 namespace AdminBundle\Tests\Controller;
 
-
 use AdminBundle\Service\RefreshApiKeys;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -26,6 +25,7 @@ class DefaultControllerTest extends WebTestCase
         $class = new \ReflectionClass(RefreshApiKeys::class);
         $method = $class->getMethod($name);
         $method->setAccessible(true);
+
         return $method;
     }
 }

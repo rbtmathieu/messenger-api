@@ -11,7 +11,7 @@ class RefreshApiKeys
     const API_KEY_LENGTH = 30;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param EntityManager $em
      */
@@ -21,13 +21,13 @@ class RefreshApiKeys
     }
 
     /**
-     * Refresh apiKey of every user
+     * Refresh apiKey of every user.
      */
     public function refreshAll()
     {
         $users = $this->em->getRepository('UserBundle:User')->findAll();
 
-        foreach($users as $user) {
+        foreach ($users as $user) {
             $apiKey = $this->generateApiKey();
             $user->setApiKey($apiKey);
 
@@ -38,7 +38,7 @@ class RefreshApiKeys
     }
 
     /**
-     * Refresh the apiKey of an User identified by ID
+     * Refresh the apiKey of an User identified by ID.
      *
      * @param int $id Id of the User
      */
@@ -55,7 +55,7 @@ class RefreshApiKeys
     }
 
     /**
-     * Generate an apiKey
+     * Generate an apiKey.
      *
      * @return string
      */

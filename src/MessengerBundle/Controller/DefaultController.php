@@ -10,8 +10,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use UserBundle\Entity\User;
 
 /**
- * Class DefaultController
- * @package MessengerBundle\Controller
+ * Class DefaultController.
  */
 class DefaultController extends Controller
 {
@@ -53,6 +52,7 @@ class DefaultController extends Controller
 
     /**
      * @ParamConverter("conversation", class="MessengerBundle:Conversation")
+     *
      * @param Conversation $conversation
      *
      * @return Conversation
@@ -127,6 +127,7 @@ class DefaultController extends Controller
 
     /**
      * @param $class
+     *
      * @return \Doctrine\Common\Persistence\ObjectRepository
      */
     private function getRepository($class)

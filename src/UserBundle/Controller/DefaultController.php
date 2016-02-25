@@ -16,7 +16,9 @@ class DefaultController extends Controller
     /**
      * @param $user1id
      * @param $user2id
+     *
      * @return Response
+     *
      * @throws NotFoundHttpException
      */
     public function addFriendAction($user1id, $user2id)
@@ -27,18 +29,20 @@ class DefaultController extends Controller
         $user1 = $userRepository->find($user1id);
         $user2 = $userRepository->find($user2id);
 
-        if (null === $user1 || null === $user2 ) {
+        if (null === $user1 || null === $user2) {
             throw new NotFoundHttpException('Friends not found');
         }
 
         $user1->addFriend($user2);
 
         $em->flush();
-        return new Response("Friend add");
+
+        return new Response('Friend add');
     }
 
     /**
      * @param $username
+     *
      * @return Response
      */
     public function searchFriendAction($username)
@@ -48,6 +52,6 @@ class DefaultController extends Controller
 
         $user = $userRepository->searchFriend($username);
 
-        return new Response("Search");
+        return new Response('Search');
     }
 }

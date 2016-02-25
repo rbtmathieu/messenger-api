@@ -25,9 +25,9 @@ class RefreshApiKeysCommand extends ContainerAwareCommand
         $id = $inputInterface->getArgument('id');
         $refresh = $this->getContainer()->get('admin.refresh_apikeys');
 
-        if($id) {
+        if ($id) {
             $refresh->refresh($id);
-            $outputInterface->writeln('ApiKey for User #' . $id . ' has been refreshed.');
+            $outputInterface->writeln('ApiKey for User #'.$id.' has been refreshed.');
         } else {
             $refresh->refreshAll();
             $outputInterface->writeln('ApiKeys has been refreshed');
