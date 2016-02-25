@@ -15,10 +15,6 @@ class ConversationHandler
             throw new InvalidParameterException('Believe me, you don\'t want to talk to yourself !');
         }
 
-        if (null !== ($from && $to)) {
-            return new Conversation($from, $to);
-        } else {
-            throw new NotFoundHttpException('Users provided does not exist');
-        }
+        return new Conversation($from, $to);
     }
 }
