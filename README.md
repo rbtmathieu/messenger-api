@@ -40,6 +40,7 @@ Workflow
 
 > *Launching fixtures*
 > - `php app/console doctrine:database:drop --force` (If you have data in your database you want to keep, make a back up before executing this)
+
 > - `php app/console doctrine:database:create` 
 > - `php app/console doctrine:migration:migrate` 
 > - `php app/console hautelook_alice:doctrine:fixtures:load` 
@@ -47,7 +48,6 @@ Workflow
 ----------
 
 > *Launching tests*
-> - create the file `app/phpunit.xml` from `app/phpunit.xml.dist`
 > - `phpunit -c app/phpunit.xml` if you installed phpunit globally
 > - `vendor/phpunit/phpunit/phpunit -c app/phpunit.xml` if you didn't
 
