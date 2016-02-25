@@ -88,7 +88,8 @@ class MessagesController extends FOSRestController
      *  resource = true,
      *  description = "Post a new message NEED X-AUTH-TOKEN",
      *  statusCodes = {
-     *      200 = "Returned when successful"
+     *      200 = "Returned when successful",
+     *      403 = "Returned when forbidden"
      *  }
      * )
      *
