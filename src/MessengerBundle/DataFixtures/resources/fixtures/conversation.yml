@@ -1,0 +1,3 @@
+MessengerBundle\Entity\Conversation:
+    conversation{1..10}:
+        __construct: [@user1, @user5]

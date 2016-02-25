@@ -1,3 +1,8 @@
 services:
     messenger.conversation_handler:
         class: MessengerBundle\Utils\Services\ConversationHandler
+
+    faker.provider:
+        class: MessengerBundle\DataFixtures\Faker\FakerProvider
+        arguments: ['@admin.refresh_apikeys']
+        tags: [ { name: hautelook_alice.faker.provider } ]

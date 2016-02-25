@@ -1,0 +1,6 @@
+MessengerBundle\Entity\Message:
+    message{1..50}:
+        type: <numberBetween(1, 2)>
+        text: <setMessageText($type)>
+        conversation: @conversation*
+        user: @user*

@@ -1,0 +1,21 @@
+UserBundle\Entity\User:
+    user1:
+        username: 'admin'
+        email: 'admin@mail.fr'
+        plainPassword: 'admin'
+        apiKey: '26de8d425c0f5792df586bd59efd7b9b'
+        roles: <adminRoles()>
+
+    user2:
+        username: 'user'
+        email: 'user@mail.fr'
+        plainPassword: 'user'
+        apiKey: 'b3533090ad1c5cf1c747f38a3784468f'
+
+    user{3..20}:
+        username: <username()>
+        email: <email()>
+        plainPassword: 'password'
+        apiKey: <apiKey()>
+        roles: <adminRoles()>
+

@@ -59,7 +59,7 @@ class RefreshApiKeys
      *
      * @return string
      */
-    private function generateApiKey()
+    public function generateApiKey()
     {
         $apiKey = substr(str_shuffle('0123456789AZERTYUIOPQSDFGHJKLMWXCVBNazertyuiopqsdfghjklmwxcvbn'), 62 - self::API_KEY_LENGTH);
 
