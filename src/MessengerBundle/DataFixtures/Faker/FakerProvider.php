@@ -1,4 +1,5 @@
 <?php
+
 namespace MessengerBundle\DataFixtures\Faker;
 
 use AdminBundle\Service\RefreshApiKeys;
@@ -11,6 +12,7 @@ class FakerProvider
 
     /**
      * DataLoader constructor.
+     *
      * @param RefreshApiKeys $apiKeys
      */
     public function __construct(RefreshApiKeys $apiKeys)
@@ -35,7 +37,7 @@ class FakerProvider
         if ($type === Message::TYPE_TEXT) {
             return simplexml_load_file('http://www.lipsum.com/feed/xml?amount=1&what=paras&start=0')->lipsum;
         } elseif ($type === Message::TYPE_WIZZ) {
-            return null;
+            return;
         }
     }
 }

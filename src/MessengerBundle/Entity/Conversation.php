@@ -5,14 +5,11 @@ namespace MessengerBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Symfony\Component\Routing\Exception\InvalidParameterException;
 use UserBundle\Entity\User;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Message
+ * Message.
  *
  * @ORM\Table(name="conversation")
  * @ORM\Entity(repositoryClass="MessengerBundle\Repository\ConversationRepository")
@@ -47,7 +44,8 @@ class Conversation
     private $users;
 
     /**
-     * Constructor
+     * Constructor.
+     *
      * @param User $user1
      * @param User $user2
      */
@@ -61,9 +59,9 @@ class Conversation
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -71,9 +69,10 @@ class Conversation
     }
 
     /**
-     * Add messages
+     * Add messages.
      *
      * @param Message $messages
+     *
      * @return Conversation
      */
     public function addMessage(Message $messages)
@@ -84,7 +83,7 @@ class Conversation
     }
 
     /**
-     * Remove messages
+     * Remove messages.
      *
      * @param Message $messages
      */
@@ -94,7 +93,7 @@ class Conversation
     }
 
     /**
-     * Get messages
+     * Get messages.
      *
      * @return Collection
      */
@@ -113,12 +112,13 @@ class Conversation
 
     /**
      * @param Collection $users
+     *
      * @return Conversation
      */
     public function setUsers(Collection $users)
     {
         if ($sers->count() >= self::LIMIT_USERS) {
-            throw new \BadMethodCallException('Conversations are only composed of '. self::LIMIT_USERS .' users');
+            throw new \BadMethodCallException('Conversations are only composed of '.self::LIMIT_USERS.' users');
         }
 
         $this->users = $users;
@@ -128,12 +128,13 @@ class Conversation
 
     /**
      * @param User $user
+     *
      * @return Conversation
      */
     public function addUser($user)
     {
         if ($this->users->count() >= self::LIMIT_USERS) {
-            throw new \BadMethodCallException('Conversations are only composed of '. self::LIMIT_USERS .' users');
+            throw new \BadMethodCallException('Conversations are only composed of '.self::LIMIT_USERS.' users');
         }
 
         $this->users->add($user);

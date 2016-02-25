@@ -21,7 +21,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     }
 
     /**
-     * Called on every request. Return credentials wanted or null to stop authenticattion
+     * Called on every request. Return credentials wanted or null to stop authenticattion.
      *
      * @param Request $request
      *
@@ -29,12 +29,12 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      */
     public function getCredentials(Request $request)
     {
-        if(!$token = $request->headers->get('X-AUTH-TOKEN')) {
+        if (!$token = $request->headers->get('X-AUTH-TOKEN')) {
             return;
         }
 
         return array(
-            'token' => $token
+            'token' => $token,
         );
     }
 
@@ -46,14 +46,14 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
             ->findOneBy(array('apiKey' => $apiKey));
     }
 
-    public function checkCredentials( $credentials, UserInterface $user )
+    public function checkCredentials($credentials, UserInterface $user)
     {
-        return true;    
+        return true;
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
-        return null;
+        return;
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
@@ -65,7 +65,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         return new JsonResponse($data, 403);
     }
 
-    public function start( Request $request, AuthenticationException $authException = null)
+    public function start(Request $request, AuthenticationException $authException = null)
     {
         $data = array(
             'message' => 'Authentication required',

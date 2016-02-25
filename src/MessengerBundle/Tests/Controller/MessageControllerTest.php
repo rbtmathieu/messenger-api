@@ -1,4 +1,5 @@
 <?php
+
 namespace MessengerBundle\Tests\Controller;
 
 use MessengerBundle\Controller\MessagesController;
@@ -42,6 +43,7 @@ class MessageControllerTest extends \PHPUnit_Framework_TestCase
         $class = new \ReflectionClass(MessagesController::class);
         $method = $class->getMethod($name);
         $method->setAccessible(true);
+
         return $method;
     }
 }

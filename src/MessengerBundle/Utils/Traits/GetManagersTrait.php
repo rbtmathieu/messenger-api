@@ -11,12 +11,10 @@ use UserBundle\Entity\User;
 use UserBundle\Repository\UserRepository;
 
 /**
- * Trait GetManagersTrait
- * @package MessengerBundle\Utils\Traits
+ * Trait GetManagersTrait.
  */
 trait GetManagersTrait
 {
-
     /**
      * @return EntityManager
      */
@@ -31,6 +29,7 @@ trait GetManagersTrait
     private function getMessageRepository()
     {
         $em = $this->getManager();
+
         return $em->getRepository(Message::class);
     }
 
@@ -40,6 +39,7 @@ trait GetManagersTrait
     private function getUserRepository()
     {
         $em = $this->getManager();
+
         return $em->getRepository(User::class);
     }
 
@@ -49,6 +49,7 @@ trait GetManagersTrait
     private function getConversationRepository()
     {
         $em = $this->getManager();
+
         return $em->getRepository(Conversation::class);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace MessengerBundle\Controller;
 
 use FOS\RestBundle\Controller\Annotations\Get;
@@ -22,8 +23,7 @@ use UserBundle\Controller\LoginApiController;
 use UserBundle\Entity\User;
 
 /**
- * Class MessagesController
- * @package MessengerBundle\Controller
+ * Class MessagesController.
  *
  * @RouteResource("Message")
  */
@@ -66,7 +66,7 @@ class MessagesController extends FOSRestController
         }
 
         $messages = [];
-        foreach($messagesFromBase as $message) {
+        foreach ($messagesFromBase as $message) {
             $messages[] = new MessageValueObject(
                 $message->getId(),
                 $this->populateUserValueObject($message->getUser()),
@@ -94,9 +94,10 @@ class MessagesController extends FOSRestController
      * )
      *
      * @param ParamFetcher $paramFetcher
-     * @param Request $request
+     * @param Request      $request
      *
      * @return View
+     *
      * @throws \HttpInvalidParamException
      *
      * @Post("/new")
@@ -127,7 +128,6 @@ class MessagesController extends FOSRestController
         // User
         $message->setUser($from);
 
-
         $em->persist($message);
         $em->persist($conversation);
         $em->flush();
@@ -146,15 +146,16 @@ class MessagesController extends FOSRestController
      * @param $type
      *
      * @return Message
+     *
      * @throws \HttpInvalidParamException
      */
     private function handleMessageType(Message $message, $type)
     {
         if (Message::TYPE_TEXT_STRING === $type) {
             $message->setType(Message::TYPE_TEXT);
-        } elseif(Message::TYPE_WIZZ_STRING === $type) {
+        } elseif (Message::TYPE_WIZZ_STRING === $type) {
             $message->setType(Message::TYPE_WIZZ);
-        } elseif(null === $type) {
+        } elseif (null === $type) {
             $message->setType(Message::TYPE_TEXT);
         } else {
             throw new \HttpInvalidParamException('The type of message provided does not exist', 400);
@@ -164,7 +165,7 @@ class MessagesController extends FOSRestController
     }
 
     /**
-     * @param User $from
+     * @param User         $from
      * @param ParamFetcher $paramFetcher
      *
      * @return Message

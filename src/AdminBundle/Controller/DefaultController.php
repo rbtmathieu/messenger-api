@@ -6,14 +6,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class DefaultController extends Controller
 {
-
     public function indexAction()
     {
         return $this->render('AdminBundle:Default:index.html.twig');
     }
 
     /**
-     * Get all users
+     * Get all users.
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -23,12 +22,12 @@ class DefaultController extends Controller
         $users = $em->getRepository('UserBundle:User')->findAll();
 
         return $this->render('AdminBundle:Default:users.html.twig', array(
-            'users' => $users
+            'users' => $users,
         ));
     }
 
     /**
-     * Modify the status of an User identified by ID
+     * Modify the status of an User identified by ID.
      *
      * @param $id
      *
@@ -43,7 +42,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * Delete an User identified by ID
+     * Delete an User identified by ID.
      *
      * @param $id
      *
@@ -61,7 +60,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * Set a new apiKey to an User identified by ID
+     * Set a new apiKey to an User identified by ID.
      *
      * @param $id
      *

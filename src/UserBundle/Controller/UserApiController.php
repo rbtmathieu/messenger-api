@@ -3,21 +3,16 @@
 namespace UserBundle\Controller;
 
 use Doctrine\Instantiator\Exception\UnexpectedValueException;
-use Doctrine\ORM\NoResultException;
 use FOS\RestBundle\Controller\Annotations\Get;
-use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcher;
-use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\View\View;
 use MessengerBundle\Utils\Traits\GetManagersTrait;
 use MessengerBundle\Utils\Traits\PopulateValueObjectsTrait;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\ConstraintViolationList;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use UserBundle\Entity\User;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
@@ -59,7 +54,7 @@ class UserApiController extends FOSRestController
         }
 
         $conversations = [];
-        foreach($conversationsFromBase as $conversation) {
+        foreach ($conversationsFromBase as $conversation) {
             $conversationValueObject = $this->populateConversationValueObject($conversation);
 
             $conversations[] = $conversationValueObject;
@@ -71,7 +66,7 @@ class UserApiController extends FOSRestController
     }
 
     /**
-     * Create an User with sent data
+     * Create an User with sent data.
      *
      * @ApiDoc(
      *  resource = true,
@@ -99,7 +94,7 @@ class UserApiController extends FOSRestController
         $user->setUsername($paramFetcher->get('username'));
         $user->setEmail($paramFetcher->get('email'));
 
-        if($paramFetcher->get('confirmPassword') == $paramFetcher->get('password')) {
+        if ($paramFetcher->get('confirmPassword') == $paramFetcher->get('password')) {
             $user->setPlainPassword($paramFetcher->get('password'));
         }
 
@@ -109,18 +104,20 @@ class UserApiController extends FOSRestController
 
         $errors = $this->get('validator')->validate($user, array('Registration'));
 
-        if(count($errors) == 0) {
+        if (count($errors) == 0) {
             $um->updateUser($user);
             $view->setData($user)->setStatusCode(200);
+
             return $view;
         } else {
             $view = $this->getErrorsView($errors);
+
             return $view;
         }
     }
 
     /**
-     * Update an User identified by Username or email with sent data NEED X-AUTH-TOKEN
+     * Update an User identified by Username or email with sent data NEED X-AUTH-TOKEN.
      *
      * @ApiDoc(
      *  resource = true,
@@ -134,7 +131,7 @@ class UserApiController extends FOSRestController
      * )
      *
      * @param ParamFetcher $paramFetcher
-     * @param Request $request
+     * @param Request      $request
      *
      * @RequestParam(name="username", nullable=false, strict=true, description="Username")
      * @RequestParam(name="newUsername", nullable=true, strict=true, description="New Username")
@@ -158,14 +155,18 @@ class UserApiController extends FOSRestController
         $um = $this->container->get('fos_user.user_manager');
         $user = $um->findUserByUsername($query->getUsername());
 
-        if($apiKey !== $user->getApiKey()) {
+        if ($apiKey !== $user->getApiKey()) {
             throw new AuthenticationException('Not authorized');
         }
 
-        if($paramFetcher->get('newUsername')) { $user->setUsername($paramFetcher->get('newUsername')); }
-        if($paramFetcher->get('newEmail')) { $user->setEmail($paramFetcher->get('newEmail')); }
-        if($paramFetcher->get('password')) {
-            if($paramFetcher->get('confirmPassword') == $paramFetcher->get('password')) {
+        if ($paramFetcher->get('newUsername')) {
+            $user->setUsername($paramFetcher->get('newUsername'));
+        }
+        if ($paramFetcher->get('newEmail')) {
+            $user->setEmail($paramFetcher->get('newEmail'));
+        }
+        if ($paramFetcher->get('password')) {
+            if ($paramFetcher->get('confirmPassword') == $paramFetcher->get('password')) {
                 $user->setPlainPassword($paramFetcher->get('password'));
             }
         }
@@ -174,18 +175,20 @@ class UserApiController extends FOSRestController
 
         $errors = $this->get('validator')->validate($user, array('Update user'));
 
-        if(count($errors) == 0) {
+        if (count($errors) == 0) {
             $um->updateUser($user);
             $view->setData($user)->setStatusCode(200);
+
             return $view;
         } else {
             $view = $this->getErrorsView($errors);
+
             return $view;
         }
     }
 
     /**
-     * Returns all friends of an User NEED X-AUTH-TOKEN
+     * Returns all friends of an User NEED X-AUTH-TOKEN.
      *
      * @ApiDoc(
      *  resource = true,
@@ -213,7 +216,7 @@ class UserApiController extends FOSRestController
 
         $view = View::create();
 
-        foreach($getFriends as $friend) {
+        foreach ($getFriends as $friend) {
             $friends[] = $this->populateUserValueObject($friend);
         }
 
@@ -221,7 +224,7 @@ class UserApiController extends FOSRestController
     }
 
     /**
-     * Return a friend identified by ID of an User NEED X-AUTH-TOKEN
+     * Return a friend identified by ID of an User NEED X-AUTH-TOKEN.
      *
      * @ApiDoc(
      *  resource = true,
@@ -238,7 +241,7 @@ class UserApiController extends FOSRestController
      *
      * @RequestParam(name="friendId", nullable=false, strict=true, description="Id of the friend")
      *
-     * @throws NotFoundHttpException If friend not found
+     * @throws NotFoundHttpException    If friend not found
      * @throws UnexpectedValueException If supposed friend is not a friend with the user
      *
      * @return View
@@ -251,23 +254,23 @@ class UserApiController extends FOSRestController
         $user = $em->getRepository('UserBundle:User')->findUserByApiKey($apiKey);
         $friend = $em->getRepository('UserBundle:User')->find($request->get('friendId'));
 
-        if(null === $friend) {
+        if (null === $friend) {
             throw new NotFoundHttpException('User could not be found');
         }
 
-        if($user->getMyFriends()->contains($friend)) {
+        if ($user->getMyFriends()->contains($friend)) {
             $view = View::create();
 
             $friend = $this->populateUserValueObject($friend);
 
             return $view->setData($friend)->setStatusCode(200);
         } else {
-            throw new UnexpectedValueException($friend->getUsername() . ' is not in the friends list of ' . $user->getUsername());
+            throw new UnexpectedValueException($friend->getUsername().' is not in the friends list of '.$user->getUsername());
         }
     }
 
     /**
-     * Add a friend identified by its ID to an User NEED X-AUTH-TOKEN
+     * Add a friend identified by its ID to an User NEED X-AUTH-TOKEN.
      *
      * @ApiDoc(
      *      resource = true,
@@ -281,7 +284,7 @@ class UserApiController extends FOSRestController
      * )
      *
      * @param ParamFetcher $paramFetcher
-     * @param Request $request
+     * @param Request      $request
      *
      * @RequestParam(name="friendId", nullable=false, strict=true, description="Id of the friend")
      *
@@ -295,7 +298,7 @@ class UserApiController extends FOSRestController
         $user = $em->getRepository('UserBundle:User')->findUserByApiKey($apiKey);
         $friend = $em->getRepository('UserBundle:User')->find($paramFetcher->get('friendId'));
 
-        if(null === $user || null === $friend) {
+        if (null === $user || null === $friend) {
             throw new NotFoundHttpException('User could not be found');
         }
 
@@ -311,7 +314,7 @@ class UserApiController extends FOSRestController
     }
 
     /**
-     * Remove an User's friend identified by its ID NEED X-AUTH-TOKEN
+     * Remove an User's friend identified by its ID NEED X-AUTH-TOKEN.
      *
      * @ApiDoc(
      *      resource = true,
@@ -325,13 +328,13 @@ class UserApiController extends FOSRestController
      * )
      *
      * @param ParamFetcher $paramFetcher
-     * @param Request $request
+     * @param Request      $request
      *
      * @RequestParam(name="friendId", nullable=false, strict=true, description="Id of the friend")
      *
      * @return View
      */
-    public function deleteFriendsAction( ParamFetcher $paramFetcher, Request $request)
+    public function deleteFriendsAction(ParamFetcher $paramFetcher, Request $request)
     {
         $apiKey = $request->headers->get('X-AUTH-TOKEN');
 
@@ -339,7 +342,7 @@ class UserApiController extends FOSRestController
         $user = $em->getRepository('UserBundle:User')->findUserByApiKey($apiKey);
         $friend = $em->getRepository('UserBundle:User')->find($paramFetcher->get('friendId'));
 
-        if(null === $user || null == $friend) {
+        if (null === $user || null == $friend) {
             throw new NotFoundHttpException('User could not be found');
         }
 
@@ -354,9 +357,8 @@ class UserApiController extends FOSRestController
         return $view->setData($users)->setStatusCode(200);
     }
 
-
     /**
-     * Search for users by username
+     * Search for users by username.
      *
      * @ApiDoc(
      *  resource = true,
@@ -381,7 +383,7 @@ class UserApiController extends FOSRestController
 
         $view = View::create();
 
-        foreach($usersSearch as $user) {
+        foreach ($usersSearch as $user) {
             $users[] = $this->populateUserValueObject($user);
         }
 
@@ -389,7 +391,7 @@ class UserApiController extends FOSRestController
     }
 
     /**
-     * Get the validation errors
+     * Get the validation errors.
      *
      * @param ConstraintViolationList $errors
      *
@@ -406,6 +408,7 @@ class UserApiController extends FOSRestController
         }
         $view = View::create($msgs);
         $view->setStatusCode(400);
+
         return $view;
     }
 }

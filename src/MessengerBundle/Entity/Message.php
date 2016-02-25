@@ -3,12 +3,11 @@
 namespace MessengerBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use UserBundle\Entity\User;
 
 /**
- * Message
+ * Message.
  *
  * @ORM\Table(name="message")
  * @ORM\Entity(repositoryClass="MessengerBundle\Repository\MessageRepository")
@@ -71,11 +70,10 @@ class Message
         }
     }
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -83,9 +81,10 @@ class Message
     }
 
     /**
-     * Set text
+     * Set text.
      *
      * @param string $text
+     *
      * @return Message
      */
     public function setText($text)
@@ -96,9 +95,9 @@ class Message
     }
 
     /**
-     * Get text
+     * Get text.
      *
-     * @return string 
+     * @return string
      */
     public function getText()
     {
@@ -106,9 +105,10 @@ class Message
     }
 
     /**
-     * Set type
+     * Set type.
      *
-     * @param integer $type
+     * @param int $type
+     *
      * @return Message
      */
     public function setType($type)
@@ -119,9 +119,9 @@ class Message
     }
 
     /**
-     * Get type
+     * Get type.
      *
-     * @return integer 
+     * @return int
      */
     public function getType()
     {
@@ -129,9 +129,10 @@ class Message
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param User $user
+     *
      * @return Message
      */
     public function setUser(User $user)
@@ -142,9 +143,9 @@ class Message
     }
 
     /**
-     * Get user
+     * Get user.
      *
-     * @return \stdClass 
+     * @return \stdClass
      */
     public function getUser()
     {

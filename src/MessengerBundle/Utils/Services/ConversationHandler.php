@@ -1,4 +1,5 @@
 <?php
+
 namespace MessengerBundle\Utils\Services;
 
 use MessengerBundle\Entity\Conversation;
@@ -10,7 +11,7 @@ class ConversationHandler
 {
     public function createConversation(User $from, User $to)
     {
-        if ($from === $to ) {
+        if ($from === $to) {
             throw new InvalidParameterException('Believe me, you don\'t want to talk to yourself !');
         }
 
@@ -20,5 +21,4 @@ class ConversationHandler
             throw new NotFoundHttpException('Users provided does not exist');
         }
     }
-
 }
