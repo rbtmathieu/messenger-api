@@ -84,6 +84,14 @@ class MessagesController extends FOSRestController
     // Post
 
     /**
+     * @ApiDoc(
+     *  resource = true,
+     *  description = "Post a new message NEED X-AUTH-TOKEN",
+     *  statusCodes = {
+     *      200 = "Returned when successful"
+     *  }
+     * )
+     *
      * @param ParamFetcher $paramFetcher
      * @param Request $request
      *
