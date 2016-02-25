@@ -60,6 +60,17 @@ class ConversationsController extends FOSRestController
     // Post
 
     /**
+     *
+     * @ApiDoc(
+     *  resource = true,
+     *  description = "Create a new conversation NEED X-AUTH-TOKEN",
+     *  statusCodes = {
+     *      200 = "Returned when successful",
+     *      400 = "Returned when data has errors",
+     *      403 = "Returned when authentication failed"
+     *  }
+     * )
+     *
      * @param ParamFetcher $paramFetcher
      * @param Request $request
      *
