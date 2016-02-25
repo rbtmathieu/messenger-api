@@ -5,12 +5,14 @@ UserBundle\Entity\User:
         plainPassword: 'admin'
         apiKey: '26de8d425c0f5792df586bd59efd7b9b'
         roles: <adminRoles()>
+        enabled: 1
 
     user2:
         username: 'user'
         email: 'user@mail.fr'
         plainPassword: 'user'
         apiKey: 'b3533090ad1c5cf1c747f38a3784468f'
+        enabled: 1
 
     user{3..20}:
         username: <username()>
@@ -18,4 +20,5 @@ UserBundle\Entity\User:
         plainPassword: 'password'
         apiKey: <apiKey()>
         roles: <adminRoles()>
+        enabled: 1
 

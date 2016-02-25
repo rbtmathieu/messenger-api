@@ -11,11 +11,11 @@ class MessageControllerTest extends \PHPUnit_Framework_TestCase
     {
         $message = new Message('Text');
 
-        $generateApiKey = $this->getMethod('handleMessageType');
+        $handleMessageType = $this->getMethod('handleMessageType');
         $defaultController = new MessagesController();
 
         /** @var Message $message */
-        $message = $generateApiKey->invokeArgs($defaultController, [
+        $message = $handleMessageType->invokeArgs($defaultController, [
             $message,
             Message::TYPE_TEXT_STRING,
         ]);
@@ -26,11 +26,11 @@ class MessageControllerTest extends \PHPUnit_Framework_TestCase
     {
         $message = new Message();
 
-        $generateApiKey = $this->getMethod('handleMessageType');
+        $handleMessageType = $this->getMethod('handleMessageType');
         $defaultController = new MessagesController();
 
         /** @var Message $message */
-        $message = $generateApiKey->invokeArgs($defaultController, [
+        $message = $handleMessageType->invokeArgs($defaultController, [
             $message,
             Message::TYPE_WIZZ_STRING,
         ]);
