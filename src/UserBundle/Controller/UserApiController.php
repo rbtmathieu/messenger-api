@@ -5,6 +5,7 @@ namespace UserBundle\Controller;
 use Doctrine\Instantiator\Exception\UnexpectedValueException;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
+use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
@@ -17,6 +18,11 @@ use UserBundle\Entity\User;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Class UserApiController.
+ *
+ * @RouteResource("User")
+ */
 class UserApiController extends FOSRestController
 {
     use GetManagersTrait;
@@ -32,15 +38,12 @@ class UserApiController extends FOSRestController
      *  }
      * )
      *
-     * @Get("/user/get/conversation/{username}")
-     *
      * @throws NotFoundHttpException
      */
-    public function getUserConversationsAction($username)
+    public function getConversationsAction(Request $request)
     {
-        $userRepository = $this->getUserRepository();
-
-        $user = $userRepository->findOneByUsernameWithConversations($username);
+        $em = $this->getManager();
+        $user = LoginApiController::checkAuthentication($request, $em);
 
         if (null === $user) {
             throw new NotFoundHttpException('The user provided does not exist');
@@ -66,6 +69,47 @@ class UserApiController extends FOSRestController
     }
 
     /**
+     * @ApiDoc(
+     *  resource = true,
+     *  description = "Returns all messages of a given user",
+     *  statusCodes = {
+     *      200 = "Returned when sucessful",
+     *      404 = "Returned when no messages are found"
+     *  }
+     * )
+     *
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getMessagesAction(Request $request)
+    {
+        $em = $this->getManager();
+        $user = LoginApiController::checkAuthentication($request, $em);
+
+        $messageRepository = $this->getMessageRepository();
+
+        if (null === $user) {
+            throw new NotFoundHttpException('The user associated with the given api key does not exist');
+        }
+
+        /** @var Message[] $messagesFromBase */
+        $messagesFromBase = $messageRepository->findByUser($user->getId());
+        if (empty($messagesFromBase)) {
+            throw new NotFoundHttpException('No message found');
+        }
+
+        $messages = [];
+        foreach ($messagesFromBase as $message) {
+            $messages[] = $this->populateMessageValueObject($message);
+        }
+
+        $view = $this->view($messages);
+
+        return $this->handleView($view);
+    }
+
+    /**
      * Create an User with sent data.
      *
      * @ApiDoc(
@@ -86,7 +130,7 @@ class UserApiController extends FOSRestController
      *
      * @return View
      */
-    public function postUserAction(ParamFetcher $paramFetcher)
+    public function postAction(ParamFetcher $paramFetcher)
     {
         $um = $this->container->get('fos_user.user_manager');
 
@@ -142,7 +186,7 @@ class UserApiController extends FOSRestController
      *
      * @return View
      */
-    public function putUserAction(ParamFetcher $paramFetcher, Request $request)
+    public function putAction(ParamFetcher $paramFetcher, Request $request)
     {
         $apiKey = $request->headers->get('X-AUTH-TOKEN');
 
@@ -216,6 +260,8 @@ class UserApiController extends FOSRestController
 
         $view = View::create();
 
+        $friends = [];
+
         foreach ($getFriends as $friend) {
             $friends[] = $this->populateUserValueObject($friend);
         }
@@ -239,20 +285,18 @@ class UserApiController extends FOSRestController
      *
      * @param Request $request
      *
-     * @RequestParam(name="friendId", nullable=false, strict=true, description="Id of the friend")
-     *
      * @throws NotFoundHttpException    If friend not found
      * @throws UnexpectedValueException If supposed friend is not a friend with the user
      *
      * @return View
      */
-    public function getUserFriendAction(Request $request)
+    public function getFriendAction(Request $request, $id)
     {
         $apiKey = $request->headers->get('X-AUTH-TOKEN');
 
         $em = $this->getDoctrine()->getManager();
         $user = $em->getRepository('UserBundle:User')->findUserByApiKey($apiKey);
-        $friend = $em->getRepository('UserBundle:User')->find($request->get('friendId'));
+        $friend = $em->getRepository('UserBundle:User')->find($id);
 
         if (null === $friend) {
             throw new NotFoundHttpException('User could not be found');
@@ -369,17 +413,13 @@ class UserApiController extends FOSRestController
      *  }
      * )
      *
-     * @param Request $request
-     *
-     * @RequestParam(name="q", nullable=false, strict=true, description="Query searched")
-     *
      * @return View
      */
-    public function searchFriendAction(Request $request)
+    public function getSearchAction($q)
     {
         $em = $this->getDoctrine()->getManager();
         $usersSearch = $em->getRepository('UserBundle:User')
-            ->searchFriend($request->get('q'));
+            ->searchFriend($q);
 
         $view = View::create();
 

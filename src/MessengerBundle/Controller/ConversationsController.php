@@ -37,8 +37,6 @@ class ConversationsController extends FOSRestController
      *  }
      * )
      *
-     * @Get("/get/messages/{id}")
-     *
      * @throws NotFoundHttpException
      */
     public function getMessagesAction($id)
@@ -77,8 +75,6 @@ class ConversationsController extends FOSRestController
      * @return View
      *
      * @throws \HttpInvalidParamException
-     *
-     * @Post("/new")
      *
      * @RequestParam(name="to", nullable=true, description="Message receiver")
      */

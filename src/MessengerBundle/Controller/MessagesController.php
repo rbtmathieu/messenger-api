@@ -13,7 +13,6 @@ use MessengerBundle\Entity\Conversation;
 use MessengerBundle\Entity\Message;
 use MessengerBundle\Utils\Traits\GetManagersTrait;
 use MessengerBundle\Utils\Traits\PopulateValueObjectsTrait;
-use MessengerBundle\Utils\ValueObject\MessageValueObject;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -37,48 +36,37 @@ class MessagesController extends FOSRestController
     /**
      * @ApiDoc(
      *  resource = true,
-     *  description = "Returns all messages of a given user",
+     *  description = "Returns a message identified by an id",
      *  statusCodes = {
      *      200 = "Returned when sucessful",
+     *      403 = "Returned when the access to this message is denied for the given user",
      *      404 = "Returned when no messages are found"
      *  }
      * )
      *
-     * @Get("/get/{username}")
+     * @param Request $request
+     * @param $id
      *
-     * @throws NotFoundHttpException
+     * @return View
      */
-    public function cgetAction($username)
+    public function getAction(Request $request, $id)
     {
-        $messageRepository = $this->getMessageRepository();
-        $userRepository = $this->getUserRepository();
+        $em = $this->getManager();
 
-        $user = $userRepository->findOneByUsername($username);
+        $user = LoginApiController::checkAuthentication($request, $em);
 
-        if (null === $user) {
-            throw new NotFoundHttpException('The user provided does not exist');
+        /** @var Message $message */
+        $message = $this->getMessageRepository()->find($id);
+
+        if (null === $message) {
+            throw new NotFoundHttpException('This message does not exist');
         }
 
-        /** @var Message[] $messagesFromBase */
-        $messagesFromBase = $messageRepository->findByUser($user->getId());
-        if (empty($messagesFromBase)) {
-            throw new NotFoundHttpException('No message found');
+        if ($user !== $message->getUser()) {
+            throw new AccessDeniedHttpException('You are not allowed to access this message');
         }
 
-        $messages = [];
-        foreach ($messagesFromBase as $message) {
-            $messages[] = new MessageValueObject(
-                $message->getId(),
-                $this->populateUserValueObject($message->getUser()),
-                $message->getConversation()->getId(),
-                $message->getText(),
-                $message->getType()
-            );
-        }
-
-        $view = $this->view($messages);
-
-        return $this->handleView($view);
+        return $this->view($this->populateMessageValueObject($message));
     }
 
     // Post
@@ -99,8 +87,6 @@ class MessagesController extends FOSRestController
      * @return View
      *
      * @throws \HttpInvalidParamException
-     *
-     * @Post("/new")
      *
      * @RequestParam(name="to", nullable=true, description="Message receiver")
      * @RequestParam(name="text", nullable=true, description="Message content")

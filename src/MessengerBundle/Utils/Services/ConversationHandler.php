@@ -3,7 +3,6 @@
 namespace MessengerBundle\Utils\Services;
 
 use MessengerBundle\Entity\Conversation;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\InvalidParameterException;
 use UserBundle\Entity\User;
 
