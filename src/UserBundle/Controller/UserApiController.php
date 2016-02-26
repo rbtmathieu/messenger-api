@@ -11,6 +11,7 @@ use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
 use MessengerBundle\Utils\Traits\GetManagersTrait;
 use MessengerBundle\Utils\Traits\PopulateValueObjectsTrait;
+use MessengerBundle\Utils\ValueObject\MessageValueObject;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Validator\ConstraintViolationList;
@@ -19,7 +20,8 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class UserApiController.
+ * Class UserApiController
+ * @package UserBundle\Controller
  *
  * @RouteResource("User")
  */
@@ -37,6 +39,8 @@ class UserApiController extends FOSRestController
      *      404 = "Returned when no messages are found"
      *  }
      * )
+     *
+     * @Get("/user/get/conversation/{username}")
      *
      * @throws NotFoundHttpException
      */
@@ -64,6 +68,46 @@ class UserApiController extends FOSRestController
         }
 
         $view = $this->view($conversations);
+
+        return $this->handleView($view);
+    }
+
+    /**
+     * @ApiDoc(
+     *  resource = true,
+     *  description = "Returns all messages of a given user",
+     *  statusCodes = {
+     *      200 = "Returned when sucessful",
+     *      404 = "Returned when no messages are found"
+     *  }
+     * )
+     *
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getMessagesAction(Request $request)
+    {
+        $em = $this->getManager();
+        $user = LoginApiController::checkAuthentication($request, $em);
+
+        $messageRepository = $this->getMessageRepository();
+
+        if (null === $user) {
+            throw new NotFoundHttpException('The user associated with the given api key does not exist');
+        }
+
+        /** @var Message[] $messagesFromBase */
+        $messagesFromBase = $messageRepository->findByUser($user->getId());
+        if (empty($messagesFromBase)) {
+            throw new NotFoundHttpException('No message found');
+        }
+
+        $messages = [];
+        foreach ($messagesFromBase as $message) {
+            $messages[] = $this->populateMessageValueObject($message);
+        }
+
+        $view = $this->view($messages);
 
         return $this->handleView($view);
     }
