@@ -13,7 +13,6 @@ use MessengerBundle\Entity\Conversation;
 use MessengerBundle\Entity\Message;
 use MessengerBundle\Utils\Traits\GetManagersTrait;
 use MessengerBundle\Utils\Traits\PopulateValueObjectsTrait;
-use MessengerBundle\Utils\ValueObject\MessageValueObject;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -47,6 +46,7 @@ class MessagesController extends FOSRestController
      *
      * @param Request $request
      * @param $id
+     *
      * @return View
      */
     public function getAction(Request $request, $id)
@@ -87,8 +87,6 @@ class MessagesController extends FOSRestController
      * @return View
      *
      * @throws \HttpInvalidParamException
-     *
-     * @Post("/new")
      *
      * @RequestParam(name="to", nullable=true, description="Message receiver")
      * @RequestParam(name="text", nullable=true, description="Message content")
