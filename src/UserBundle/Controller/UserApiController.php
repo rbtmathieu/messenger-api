@@ -248,7 +248,7 @@ class UserApiController extends FOSRestController
      *
      * @return View
      */
-    public function getUserFriendsAction(Request $request)
+    public function getFriendsAction(Request $request)
     {
         $apiKey = $request->headers->get('X-AUTH-TOKEN');
 
