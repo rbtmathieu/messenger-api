@@ -11,6 +11,7 @@ use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
 use MessengerBundle\Utils\Traits\GetManagersTrait;
 use MessengerBundle\Utils\Traits\PopulateValueObjectsTrait;
+use MessengerBundle\Utils\ValueObject\MessageValueObject;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Validator\ConstraintViolationList;
@@ -19,7 +20,8 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class UserApiController.
+ * Class UserApiController
+ * @package UserBundle\Controller
  *
  * @RouteResource("User")
  */
@@ -79,7 +81,6 @@ class UserApiController extends FOSRestController
      * )
      *
      * @param Request $request
-     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function getMessagesAction(Request $request)
@@ -242,8 +243,6 @@ class UserApiController extends FOSRestController
      *      403 = "Returned when forbidden"
      *  }
      * )
-     *
-     * @Get("/user/friends")
      *
      * @param Request $request
      *
