@@ -40,8 +40,6 @@ class UserApiController extends FOSRestController
      *  }
      * )
      *
-     * @Get("/user/get/conversation/{username}")
-     *
      * @throws NotFoundHttpException
      */
     public function getConversationsAction(Request $request)
@@ -83,47 +81,6 @@ class UserApiController extends FOSRestController
      * )
      *
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function getMessagesAction(Request $request)
-    {
-        $em = $this->getManager();
-        $user = LoginApiController::checkAuthentication($request, $em);
-
-        $messageRepository = $this->getMessageRepository();
-
-        if (null === $user) {
-            throw new NotFoundHttpException('The user associated with the given api key does not exist');
-        }
-
-        /** @var Message[] $messagesFromBase */
-        $messagesFromBase = $messageRepository->findByUser($user->getId());
-        if (empty($messagesFromBase)) {
-            throw new NotFoundHttpException('No message found');
-        }
-
-        $messages = [];
-        foreach ($messagesFromBase as $message) {
-            $messages[] = $this->populateMessageValueObject($message);
-        }
-
-        $view = $this->view($messages);
-
-        return $this->handleView($view);
-    }
-
-    /**
-     * @ApiDoc(
-     *  resource = true,
-     *  description = "Returns all messages of a given user",
-     *  statusCodes = {
-     *      200 = "Returned when sucessful",
-     *      404 = "Returned when no messages are found"
-     *  }
-     * )
-     *
-     * @param Request $request
-     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function getMessagesAction(Request $request)
@@ -286,8 +243,6 @@ class UserApiController extends FOSRestController
      *      403 = "Returned when forbidden"
      *  }
      * )
-     *
-     * @Get("/user/friends")
      *
      * @param Request $request
      *
